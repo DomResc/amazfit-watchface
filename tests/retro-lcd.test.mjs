@@ -77,7 +77,7 @@ test('lifecycle detaches every sensor, refreshes resume and suppresses unchanged
 test('Retro LCD release identity and target catalog remain independent',async()=>{
   const manifest=JSON.parse(await readFile(new URL('../src/watchfaces/retro-lcd/app.json',import.meta.url),'utf8'));
   assert.equal(manifest.app.appId,1092704);
-  assert.deepEqual(releaseConfig('retro-lcd-v0.1.5',manifest,'retro-lcd'),{version:'0.1.5',asset:'install/*.zip'});
+  assert.deepEqual(releaseConfig(`retro-lcd-v${manifest.app.version.name}`,manifest,'retro-lcd'),{version:manifest.app.version.name,asset:'install/*.zip'});
   assert.throws(()=>releaseConfig('matrix-v0.1.0',manifest,'retro-lcd'));
 });
 
@@ -124,4 +124,13 @@ test('AOD shares normal time/date geometry and stays free of secondary data',asy
   assert.deepEqual(aodTime.map(w=>[w.options.x,w.options.y]),normalTime.map(w=>[w.options.x,w.options.y]));
   assert.ok(h.widgets.some(w=>w.options.src==='digits/aod-date/slash.png' && w.options.y===387));
   assert.ok(h.widgets.filter(w=>w.options.show_level===2).every(w=>w.options.src?.startsWith('digits/') || w.options.src?.startsWith('week/')));
+});
+
+test('Retro LCD includes the full round 480 by 480 target catalog',async()=>{
+  const base=new URL('../src/watchfaces/',import.meta.url);
+  const expected=JSON.parse(await readFile(new URL('essential/targets.json',base),'utf8'));
+  const actual=JSON.parse(await readFile(new URL('retro-lcd/targets.json',base),'utf8'));
+  const manifest=JSON.parse(await readFile(new URL('retro-lcd/app.json',base),'utf8'));
+  assert.deepEqual(actual,expected);
+  assert.deepEqual(manifest.targets['balance-2-xt'].platforms,expected.devices);
 });

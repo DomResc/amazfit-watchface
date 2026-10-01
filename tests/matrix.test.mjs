@@ -19,13 +19,13 @@ test('dial edges align with the hour and minute outer edges', () => {
   assert.ok(Math.abs(NORMAL.seconds.x + 54 - (NORMAL.digits[3] + 60)) <= 1);
   assert.equal(NORMAL.battery.cy,NORMAL.seconds.cy);
 });
-async function harness() {
+async function harness(deviceSource=10486017) {
   const widgets=[];const listeners=new Set();let definition;let writes=0;let creates=0;
   const sensor={...sample,event:{MINUTEEND:1},addEventListener(event,fn){assert.equal(event,1);listeners.add(fn);},removeEventListener(event,fn){assert.equal(event,1);listeners.delete(fn);}};
   const settings={language:2,mileage:0};
   const kinds={IMG:1,TEXT:2,FILL_RECT:3,TEXT_IMG:4,IMG_POINTER:5,IMG_TIME:6,TIME_POINTER:7,WIDGET_DELEGATE:8,ARC_PROGRESS:9,CIRCLE:10};
   const ui={widget:kinds,prop:{TEXT:1,MORE:2},align:{CENTER_H:1,CENTER_V:2,LEFT:3},text_style:{NONE:0},show_level:{ONLY_NORMAL:1,ONAL_AOD:2},data_type:{CAL:1,DISTANCE:2,HEART:3,BATTERY:4,STEP:5},createWidget(id,options){const widget={id,options:{...options},setProperty(prop,value){if(prop===1)this.options.text=value;else Object.assign(this.options,value);writes++;}};widgets.push(widget);return widget;}};
-  const context=vm.createContext({hmUI:ui,hmSensor:{id:{TIME:1},createSensor(){creates++;return sensor;}},hmSetting:{getLanguage:()=>settings.language,getMileageUnit:()=>settings.mileage},WatchFace:config=>{definition=config;}});
+  const context=vm.createContext({hmUI:ui,hmSensor:{id:{TIME:1},createSensor(){creates++;return sensor;}},hmSetting:{getLanguage:()=>settings.language,getMileageUnit:()=>settings.mileage,getDeviceInfo:()=>({deviceSource})},WatchFace:config=>{definition=config;}});
   const modules=new Map();
   async function load(url){
     if(modules.has(url.href))return modules.get(url.href);
@@ -72,4 +72,22 @@ test('minute refresh handles rollover, resume, language and units without duplic
   h.definition.build();assert.equal(h.listeners.size,1);
   h.definition.onDestroy();assert.equal(h.listeners.size,0);
   h.delegate.resume_call();assert.equal(h.listeners.size,0);
+});
+
+test('legacy GTR 3 Pro variants use the system font while retaining bitmap time and native metrics',async()=>{
+  for(const source of [229,230,242,6095106]){
+    const h=await harness(source);
+    for(const w of h.widgets.filter(w=>w.id===h.kinds.TEXT))assert.ok(!('font' in w.options));
+    assert.equal(h.widgets.filter(w=>w.id===h.kinds.TEXT_IMG).length,5);
+    assert.equal(h.widgets.find(w=>w.id===h.kinds.TEXT&&w.options.y===177).options.text,'THU  01 OCT');
+    h.definition.onDestroy();assert.equal(h.listeners.size,0);
+  }
+});
+test('Matrix includes the complete round 480 by 480 catalog',async()=>{
+  const base=new URL('../src/watchfaces/',import.meta.url);
+  const expected=JSON.parse(await readFile(new URL('essential/targets.json',base),'utf8'));
+  const actual=JSON.parse(await readFile(new URL('matrix/targets.json',base),'utf8'));
+  const manifest=JSON.parse(await readFile(new URL('matrix/app.json',base),'utf8'));
+  assert.deepEqual(actual,expected);
+  assert.deepEqual(manifest.targets['balance-2-xt'].platforms,expected.devices);
 });

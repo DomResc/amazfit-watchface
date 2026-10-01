@@ -1,9 +1,7 @@
-# Retro LCD 0.1.5
+Retro LCD 0.1.6 for all round 480 × 480 devices in the checked-in Zeus catalog.
 
-Improve physical-display readability with larger secondary numbers, captions and icons. Rasterize numeric glyphs at their final pixel size and remove surface noise. Keep the Sage LCD palette with a black activity background.
+Expands installation packages from three Balance 2 XT variants to all 40 matching deviceSource entries. The existing LCD layout, bitmap typography, sensor/status bindings and AOD are preserved. No custom TTF font support is required.
 
-Use a 70-pixel main time with 26-pixel seconds on the same baseline. Increase alarm and battery icons to 32 and 28 pixels, enlarge the battery segments to 68×20, and lower the weekday/DD/MM row for additional spacing.
+Download the ZIP matching your deviceSource and open it with Gadgetbridge. Package names include the device model and source.
 
-Align AOD time and weekday/date to the normal view's dimensions and positions, using dim text on black and no secondary data. Simulator weather/alarm demonstration values remain isolated from device builds.
-
-Local formatting, resource, geometry, lifecycle, type and packaging checks pass. Physical Balance 2 XT rendering and AOD behavior remain to be verified.
+All targets are build-validated only. Physical-device installation, sensor/status availability, weather synchronization and AOD transitions require testing on each model. A shared display resolution does not establish full firmware compatibility.

@@ -8,6 +8,7 @@ The first watchface, [Essential](src/watchfaces/essential/README.md), is impleme
 
 - [Development plan](docs/development-plan.md): architecture, milestones and validation.
 - [Device evidence](docs/device-validation.md): target information and physical checks.
+- [Device target policy](docs/device-target-policy.md): full round 480 × 480 release coverage, compatibility and validation evidence.
 
 [Matrix](src/watchfaces/matrix/README.md) is the second independent watchface: retro dot-matrix time, activity metrics and a seconds dial with minimal AOD. Build it with `npm run build -- matrix`; the user confirmed a successful trial on Balance 2 XT. Detailed device checks remain pending.
 

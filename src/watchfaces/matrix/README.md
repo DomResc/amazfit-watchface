@@ -1,6 +1,6 @@
 # Matrix
 
-Independent retro dot-matrix watchface for Amazfit Balance 2 XT, designed at 480 × 480. Version 0.1.1 uses local application ID `1092703`, separate from Essential.
+Independent retro dot-matrix watchface for round 480 × 480 Amazfit devices, designed at 480 × 480. Version 0.1.2 uses local application ID `1092703`, separate from Essential.
 
 ## Display
 
@@ -24,7 +24,7 @@ npm run typecheck
 npm run build -- matrix
 ```
 
-The build validates and writes installation ZIPs into `dist/install/` for Balance 2 XT variants `10486016`, `10486017` and `10486019`. Select the ZIP matching the device source and install locally through Gadgetbridge. Matrix is covered by the validation workflow. Pushing `matrix-v0.1.1` starts an automatic release that builds and publishes Matrix only. Ordinary CI builds both watchfaces.
+The build validates and writes installation ZIPs into `dist/install/` for the complete 40-deviceSource [round 480 × 480 catalog](TARGETS.md). Select the ZIP matching the device source and install locally through Gadgetbridge. Matrix is covered by the validation workflow. Pushing `matrix-v0.1.2` starts an automatic release that builds and publishes Matrix only. Ordinary CI builds both watchfaces.
 
 ## Assets and previews
 
@@ -32,7 +32,7 @@ The build validates and writes installation ZIPs into `dist/install/` for Balanc
 python3 scripts/render-matrix-assets.py
 ```
 
-Pillow is an optional generation input. The generator uses the bundled Orbitron Medium font by default and generates original LED/hand assets and previews. Labels and dates render directly through Zepp's native text widgets with an explicit Orbitron TTF. Dial outlines render through native arcs; host-side previews approximate native rasterization.
+Pillow is an optional generation input. The generator uses the bundled Orbitron Medium font by default and generates original LED/hand assets and previews. Labels and dates render directly through Zepp's native text widgets with an explicit Orbitron TTF on supported devices. GTR 3 Pro variants use the system font because they lack custom TTF support. Dial outlines render through native arcs; host-side previews approximate native rasterization.
 
 See [third-party notices](THIRD_PARTY_NOTICES.md) and [the font license](Orbitron-OFL.txt). The complete font license is included in installation ZIPs.
 
@@ -40,3 +40,7 @@ See [third-party notices](THIRD_PARTY_NOTICES.md) and [the font license](Orbitro
 ## Device validation
 
 The 0.1.1 Orbitron/native-arc variant has been compiled and loaded in the Balance 2 simulator; physical validation of 0.1.1 is pending. The user confirmed a successful physical-device trial of 0.1.0 on Balance 2 XT with the `10486017` build on 2026-10-01. Detailed checks remain pending: verify installation and selection preview, midnight/date rollover, minute updates, seconds `59 → 00`, hand direction, heart/battery pointer updates, distance units, long activity values, sleep/resume and AOD transitions on Balance 2 XT. Check that native seconds widgets stop updating while AOD is active.
+
+## Target policy
+
+Follow the repository [device target and release policy](../../../docs/device-target-policy.md) for full round 480 × 480 catalog coverage, compatibility fallbacks and validation claims. This watchface is configured for the complete matching catalog.

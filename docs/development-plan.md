@@ -9,7 +9,7 @@ Create a maintainable personal watchface portfolio, starting with one small Bala
 ## Architecture
 
 - One independently buildable directory per watchface under `src/watchfaces/<name>/`.
-- `app.json` owns app identity, version, permissions, API requirements and explicit device targets.
+- `app.json` owns app identity, version, permissions, API requirements and explicit device targets. Follow the [device target policy](device-target-policy.md): round 480 × 480 designs target the full matching catalog with required compatibility fallbacks.
 - `watchface/index.js` coordinates lifecycle and rendering. Extract component/layout files only when they make the implementation clearer.
 - Keep pure time/date logic independently testable. Keep device API access at the boundary.
 - Place assets within each watchface. Add generators when repeated assets justify them and record font/artwork provenance.

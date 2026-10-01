@@ -53,12 +53,15 @@ WatchFace({
   build() {
     pause(); destroyed = false; views = []; previous.clear();
     sensor = hmSensor.createSensor(hmSensor.id.TIME);
+    // GTR 3 Pro variants run the original OS without custom TTF support.
+    const systemFont = [229, 230, 242, 6095106].includes(hmSetting.getDeviceInfo().deviceSource);
     const normal = hmUI.show_level.ONLY_NORMAL;
     const aod = hmUI.show_level.ONAL_AOD;
     hmUI.createWidget(hmUI.widget.FILL_RECT, { x: 0, y: 0, w: 480, h: 480, color: 0, show_level: normal | aod });
     /** @type {(x: number, y: number, w: number, h: number, size: number, value: string, level: number, color?: number) => MatrixWidget} */
     const text = (x, y, w, h, size, value, level, color = 0xffffff) => hmUI.createWidget(hmUI.widget.TEXT, {
-      x, y, w, h, text_size: size, text: value, color, font: 'fonts/Orbitron-Medium.ttf',
+      x, y, w, h, text_size: size, text: value, color,
+      ...(systemFont ? {} : { font: 'fonts/Orbitron-Medium.ttf' }),
       align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V,
       text_style: hmUI.text_style.NONE, show_level: level,
     });

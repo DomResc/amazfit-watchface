@@ -61,3 +61,7 @@ Source code is original project work under MIT. `assets/balance-2-xt/icon.png` d
 - [Time preference](https://docs.zepp.com/docs/watchface/api/hmSetting/getTimeFormat/)
 - [Gadgetbridge Zepp OS support](https://gadgetbridge.org/basics/topics/zeppos/)
 - [Gadgetbridge installer](https://gadgetbridge.org/internals/features/installer/)
+
+## Target policy
+
+Follow the repository [device target and release policy](../../../docs/device-target-policy.md) for full round 480 × 480 catalog coverage, compatibility fallbacks and validation claims. This watchface is configured for the complete matching catalog.

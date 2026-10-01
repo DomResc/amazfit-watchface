@@ -19,6 +19,6 @@ declare const hmUI: {
   createWidget(id: number, options: MatrixOptions): MatrixWidget;
 };
 declare const hmSensor: {id: {TIME: number}; createSensor(id: number): MatrixTimeSensor};
-declare const hmSetting: {getLanguage(): number; getMileageUnit(): number};
+declare const hmSetting: {getLanguage(): number; getMileageUnit(): number; getDeviceInfo(): {deviceSource: number}};
 declare function WatchFace(config: {build(): void; onDestroy(): void}): void;
 declare function App(config: Record<string, never>): void;

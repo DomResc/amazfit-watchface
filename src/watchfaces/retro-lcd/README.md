@@ -1,6 +1,6 @@
 # Retro LCD
 
-Independent 480 × 480 circular LCD watchface for Amazfit Balance 2 XT. Application ID `1092704`, version `0.1.5`.
+Independent 480 × 480 circular LCD watchface for the full round 480 × 480 Amazfit catalog. Application ID `1092704`, version `0.1.6`.
 
 The approved Sensors-inspired layout uses a graphite activity background, LCD-gray activity arcs, and gray LCD weather, sleep and time panels following the circular display. The approved Sage LCD palette is: main `#8b9984`, lower edge `#65715d`, shadow `#4a5647`, ink `#080a0a`. No Casio branding is included.
 
@@ -25,7 +25,7 @@ npm run build -- retro-lcd
 
 The Pillow renderer uses the retained background and icon rasters, native font metrics and `watchface/layout.json`. It generates 101 transparent frames per activity ring, glyphs, status masks, layout constants, and illustrative normal/AOD previews. Preview data is never hardcoded into runtime sensor values.
 
-Installation ZIPs are in `dist/install/` for device sources `10486016`, `10486017`, `10486019`. Use the ZIP matching the watch. Local tests and builds do not establish physical watch behavior: verify weather synchronization, sleep availability, minute targets, alarms, connection/DND transitions, seconds rollover, 12-hour mode and AOD on the device.
+Installation ZIPs are in `dist/install/` for every deviceSource in the [round 480 × 480 catalog](TARGETS.md). Use the ZIP matching the watch. Local tests and builds do not establish physical watch behavior: verify weather synchronization, sleep availability, minute targets, alarms, connection/DND transitions, seconds rollover, 12-hour mode and AOD on the device.
 
 ## Local simulator
 
@@ -35,8 +35,12 @@ Download and launch the Balance 2 device in Zepp OS Simulator, then run from the
 npm run preview:retro-lcd
 ```
 
-Accept the default simulator host `127.0.0.1`. The command creates a temporary project with the existing Balance 2 device IDs and runs `zeus dev`. Installation targets stay restricted to Balance 2 XT. Restart the command after editing source code or regenerating assets to copy the latest production files into the temporary project. The temporary copy can be deleted after stopping Zeus.
+Accept the default simulator host `127.0.0.1`. The command creates a temporary project with the existing Balance 2 device IDs and runs `zeus dev`. The production manifest retains the full round 480 × 480 catalog; the simulator-only copy uses the Balance 2 profile. Restart the command after editing source code or regenerating assets to copy the latest production files into the temporary project. The temporary copy can be deleted after stopping Zeus.
 
 The simulator command injects weather 17°C, daily range 12–21°C and alarm 07:00 only into its temporary copy. Device builds retain native sensor and alarm bindings.
 
 Version 0.1.5 applies the approved Sage LCD palette: panel/ring `#8b9984`, shadow `#4a5647`, bottom edge `#65715d`. Activity rings have a four-pixel gap. The main time is 70 pixels high; seconds are 26 pixels high and share its baseline. Alarm and a 68×20 battery bar sit above the main time. Status captions share y=435 in the reduced strip beginning at y=426.
+
+## Target policy
+
+Follow the repository [device target and release policy](../../../docs/device-target-policy.md) for full round 480 × 480 catalog coverage, compatibility fallbacks and validation claims. This watchface is configured for the complete matching catalog. Text and digits use bitmap assets, so custom TTF support is not required. Sensor/status and AOD behavior on other models remain subject to physical checks.
