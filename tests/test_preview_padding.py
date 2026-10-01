@@ -94,10 +94,14 @@ class TargetPackageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / 'bundle.zab'
             self.make_bundle(path, [{'deviceSource': 10486017}, {'deviceSource': 10486019}], 1092703)
-            packager.extract_device(path, 1092703, '0.1.3', 10486017, 'matrix')
+            payload = packager.extract_device(path, 1092703, '0.1.3', 10486017, 'matrix')
+            with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+                self.assertIn(b'SIL OPEN FONT LICENSE', archive.read('Orbitron-OFL.txt'))
             self.make_bundle(path, [{'deviceSource': 10486017}, {'deviceSource': 230}], 1092703)
             with self.assertRaises(ValueError):
-                packager.extract_device(path, 1092703, '0.1.3', 10486017, 'matrix')
+                payload = packager.extract_device(path, 1092703, '0.1.3', 10486017, 'matrix')
+            with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+                self.assertIn(b'SIL OPEN FONT LICENSE', archive.read('Orbitron-OFL.txt'))
 
     def test_package_with_an_unlisted_target_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -1,10 +1,10 @@
 # Matrix
 
-Independent retro dot-matrix watchface for Amazfit Balance 2 XT, designed at 480 × 480. Version 0.1.0 uses local application ID `1092703`, separate from Essential.
+Independent retro dot-matrix watchface for Amazfit Balance 2 XT, designed at 480 × 480. Version 0.1.1 uses local application ID `1092703`, separate from Essential.
 
 ## Display
 
-- Fixed 24-hour dot-matrix time, with Italian or English weekday and date labels.
+- Fixed 24-hour time with 15 × 21 dot-matrix digits using the same 2 × 2 pixel LEDs as small values, with Italian or English weekday and date labels.
 - Calories, last heart rate measurement, distance, battery and steps use native Zepp data widgets. Numeric field padding follows the native widgets rather than the reference image's decorative leading zeros.
 - Distance uses the device's metric/imperial preference with a matching KM/MI heading.
 - Battery and heart rate use native data-bound pointers. The heart scale follows Zepp's native HEART data range; it is a visual indicator rather than a clinical scale.
@@ -24,16 +24,19 @@ npm run typecheck
 npm run build -- matrix
 ```
 
-The build validates and writes installation ZIPs into `dist/install/` for Balance 2 XT variants `10486016`, `10486017` and `10486019`. Select the ZIP matching the device source and install locally through Gadgetbridge. Matrix is covered by the validation workflow. Pushing `matrix-v0.1.0` starts an automatic release that builds and publishes Matrix only. Ordinary CI builds both watchfaces.
+The build validates and writes installation ZIPs into `dist/install/` for Balance 2 XT variants `10486016`, `10486017` and `10486019`. Select the ZIP matching the device source and install locally through Gadgetbridge. Matrix is covered by the validation workflow. Pushing `matrix-v0.1.1` starts an automatic release that builds and publishes Matrix only. Ordinary CI builds both watchfaces.
 
 ## Assets and previews
 
 ```sh
-python3 scripts/render-matrix-assets.py /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+python3 scripts/render-matrix-assets.py
 ```
 
-Pillow and the indicated font are optional generation inputs, not runtime dependencies. Original dot glyphs and dial artwork are generated into `assets/balance-2-xt/`; screenshots are composed from the same assets in `docs/previews/matrix-normal.png` and `docs/previews/matrix-aod.png`. Native widget formatting and on-device date font metrics can differ from the static composition. See [third-party notices](THIRD_PARTY_NOTICES.md) for raster label typography attribution.
+Pillow is an optional generation input. The generator uses the bundled Orbitron Medium font by default and generates original LED/hand assets and previews. Labels and dates render directly through Zepp's native text widgets with an explicit Orbitron TTF. Dial outlines render through native arcs; host-side previews approximate native rasterization.
+
+See [third-party notices](THIRD_PARTY_NOTICES.md) and [the font license](Orbitron-OFL.txt). The complete font license is included in installation ZIPs.
+
 
 ## Device validation
 
-The user confirmed a successful physical-device trial on Balance 2 XT with the `10486017` build on 2026-10-01. Detailed checks remain pending: verify installation and selection preview, midnight/date rollover, minute updates, seconds `59 → 00`, hand direction, heart/battery pointer updates, distance units, long activity values, sleep/resume and AOD transitions on Balance 2 XT. Check that native seconds widgets stop updating while AOD is active.
+The 0.1.1 Orbitron/native-arc variant has been compiled and loaded in the Balance 2 simulator; physical validation of 0.1.1 is pending. The user confirmed a successful physical-device trial of 0.1.0 on Balance 2 XT with the `10486017` build on 2026-10-01. Detailed checks remain pending: verify installation and selection preview, midnight/date rollover, minute updates, seconds `59 → 00`, hand direction, heart/battery pointer updates, distance units, long activity values, sleep/resume and AOD transitions on Balance 2 XT. Check that native seconds widgets stop updating while AOD is active.

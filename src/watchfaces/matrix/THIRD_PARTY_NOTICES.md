@@ -1,61 +1,10 @@
-# Artwork and typography
+# Typography and artwork
 
-The dot-matrix glyphs, dial artwork and hands are original project artwork. The user-provided reference image is visual inspiration only and is not distributed.
+Orbitron Medium is bundled unmodified from the official Google Fonts upstream static TTF:
+https://github.com/googlefonts/orbitron-vf/blob/master/fonts/ttf/Orbitron-Medium.ttf
 
-Raster labels and preview dates were generated with DejaVu Sans. No font file is bundled. Font source: https://dejavu-fonts.github.io/
+Copyright 2018 The Orbitron Project Authors (https://github.com/theleagueof/orbitron), with Reserved Font Name: "Orbitron".
+Licensed under the SIL Open Font License, Version 1.1. See [the complete font license](Orbitron-OFL.txt).
 
-The following font notice applies to the generation input:
-
-```text
-Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: DejaVu fonts
-Upstream-Author: Stepan Roh <src@users.sourceforge.net> (original author),
-                  see /usr/share/doc/fonts-dejavu-core/AUTHORS for full list
-Source: https://dejavu-fonts.github.io/
-
-Files: *
-Copyright: Copyright (c) 2003 by Bitstream, Inc. All Rights Reserved. 
- Bitstream Vera is a trademark of Bitstream, Inc.
- DejaVu changes are in public domain.
-License: bitstream-vera
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of the fonts accompanying this license ("Fonts") and associated
- documentation files (the "Font Software"), to reproduce and distribute the
- Font Software, including without limitation the rights to use, copy, merge,
- publish, distribute, and/or sell copies of the Font Software, and to permit
- persons to whom the Font Software is furnished to do so, subject to the
- following conditions:
- .
- The above copyright and trademark notices and this permission notice shall
- be included in all copies of one or more of the Font Software typefaces.
- .
- The Font Software may be modified, altered, or added to, and in particular
- the designs of glyphs or characters in the Fonts may be modified and
- additional glyphs or characters may be added to the Fonts, only if the fonts
- are renamed to names not containing either the words "Bitstream" or the word
- "Vera".
- .
- This License becomes null and void to the extent applicable to Fonts or Font
- Software that has been modified and is distributed under the "Bitstream
- Vera" names.
- .
- The Font Software may be sold as part of a larger software package but no
- copy of one or more of the Font Software typefaces may be sold by itself.
- .
- THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
- OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF COPYRIGHT, PATENT,
- TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL BITSTREAM OR THE GNOME
- FOUNDATION BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, INCLUDING
- ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF
- THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM OTHER DEALINGS IN THE
- FONT SOFTWARE.
- .
- Except as contained in this notice, the names of Gnome, the Gnome
- Foundation, and Bitstream Inc., shall not be used in advertising or
- otherwise to promote the sale, use or other dealings in this Font Software
- without prior written authorization from the Gnome Foundation or Bitstream
- Inc., respectively. For further information, contact: fonts at gnome dot
- org.
-```
+Dot-matrix glyphs and hand assets are original project artwork. The user-provided reference image is visual inspiration only and is not distributed.
+The Modular watchface in novvember's collection was consulted for native font and arc API usage; no Modular implementation code or artwork is included.

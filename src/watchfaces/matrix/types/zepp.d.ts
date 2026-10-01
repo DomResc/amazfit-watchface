@@ -10,7 +10,7 @@ interface MatrixOptions {
   [key: string]: string | number | boolean | string[] | (() => void);
 }
 declare const hmUI: {
-  widget: {IMG: number; TEXT: number; FILL_RECT: number; TEXT_IMG: number; IMG_POINTER: number; IMG_TIME: number; TIME_POINTER: number; WIDGET_DELEGATE: number};
+  widget: {IMG: number; TEXT: number; FILL_RECT: number; TEXT_IMG: number; IMG_POINTER: number; IMG_TIME: number; TIME_POINTER: number; WIDGET_DELEGATE: number; ARC_PROGRESS: number; CIRCLE: number};
   prop: {TEXT: number; MORE: number};
   align: {CENTER_H: number; CENTER_V: number; LEFT: number};
   text_style: {NONE: number};

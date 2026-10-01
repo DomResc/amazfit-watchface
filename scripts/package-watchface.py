@@ -51,9 +51,9 @@ def extract_device(bundle_path, app_id, version, device_source=10486017, name="e
                     or app['app']['appType'] != 'watchface'
                     or app['platforms'] != platforms):
                 raise ValueError('Device identity or target does not match')
-            for name in ['app.bin', 'watchface/index.bin', 'assets/icon.png']:
-                if not device.read(name):
-                    raise ValueError(f'Empty package entry: {name}')
+            for resource in ['app.bin', 'watchface/index.bin', 'assets/icon.png']:
+                if not device.read(resource):
+                    raise ValueError(f'Empty package entry: {resource}')
         # Zeus pads RGB565 previews to a multiple of 16 pixels. Clear all
         # padding bits: bit 15 is red in RGB565, not an alpha flag.
         output = io.BytesIO()
@@ -68,6 +68,9 @@ def extract_device(bundle_path, app_id, version, device_source=10486017, name="e
                         raise ValueError('Unexpected preview dimensions')
                     data = blacken_padding(data, width, height)
                 target.writestr(entry, data)
+            project = Path(__file__).resolve().parents[1] / 'src/watchfaces' / name
+            for license_path in project.glob('*-OFL.txt'):
+                target.writestr(license_path.name, license_path.read_bytes())
         return output.getvalue()
 
 

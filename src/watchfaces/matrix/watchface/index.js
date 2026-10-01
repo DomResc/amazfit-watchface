@@ -56,17 +56,40 @@ WatchFace({
     const normal = hmUI.show_level.ONLY_NORMAL;
     const aod = hmUI.show_level.ONAL_AOD;
     hmUI.createWidget(hmUI.widget.FILL_RECT, { x: 0, y: 0, w: 480, h: 480, color: 0, show_level: normal | aod });
-    image(0, 0, 'background.png', normal);
+    /** @type {(x: number, y: number, w: number, h: number, size: number, value: string, level: number, color?: number) => MatrixWidget} */
+    const text = (x, y, w, h, size, value, level, color = 0xffffff) => hmUI.createWidget(hmUI.widget.TEXT, {
+      x, y, w, h, text_size: size, text: value, color, font: 'fonts/Orbitron-Medium.ttf',
+      align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V,
+      text_style: hmUI.text_style.NONE, show_level: level,
+    });
+    /** @type {(cx: number, cy: number, radius: number, start: number, end: number) => MatrixWidget} */
+    const arc = (cx, cy, radius, start, end) => hmUI.createWidget(hmUI.widget.ARC_PROGRESS, {
+      center_x: cx, center_y: cy, radius, start_angle: start, end_angle: end,
+      line_width: 2, level: 100, color: 0xffffff, show_level: normal,
+    });
+    // Mask the lower half of a full native ring; partial-arc orientation differs in this simulator.
+    arc(240, 76, 30, 0, 360);
+    hmUI.createWidget(hmUI.widget.FILL_RECT, { x: 208, y: 76, w: 64, h: 33, color: 0, show_level: normal });
+    for (const cx of [NORMAL.battery.cx, NORMAL.seconds.cx]) {
+      arc(cx, 358, 26, 0, 360);
+      hmUI.createWidget(hmUI.widget.CIRCLE, { center_x: cx, center_y: 358, radius: 2, color: 0xffffff, show_level: normal });
+      hmUI.createWidget(hmUI.widget.FILL_RECT, { x: cx, y: 380, w: 1, h: 4, color: 0xaaaaaa, show_level: normal });
+    }
+    text(76, 104, 70, 20, 13, 'KCAL', normal);
+    text(210, 119, 60, 18, 12, 'BPM', normal);
+    text(190, 64, 20, 15, 10, 'L', normal);
+    text(270, 64, 20, 15, 10, 'H', normal);
+    text(140, 325, 60, 23, 13, 'BAT', normal);
+    text(280, 325, 60, 23, 13, 'SEC', normal);
+    text(200, 359, 24, 21, 16, '%', normal);
+    text(190, 403, 100, 22, 13, 'STEPS', normal);
     for (const [layout, level, isAod] of /** @type {[typeof NORMAL | typeof AOD, number, boolean][]} */ ([[NORMAL, normal, false], [AOD, aod, true]])) {
       const digits = layout.digits.map(x => image(x, layout.y, `digits/${isAod ? 'aod' : 'time'}/dash.png`, level));
       image(layout.colon.x, layout.colon.y, `digits/${isAod ? 'aod' : 'time'}/colon.png`, level);
-      const date = hmUI.createWidget(hmUI.widget.TEXT, { ...layout.date, align_h: hmUI.align.CENTER_H,
-        align_v: hmUI.align.CENTER_V, text_style: hmUI.text_style.NONE, text: '', show_level: level });
+      const date = text(70, layout.date.y, 340, 24, isAod ? 15 : 16, '', level, isAod ? 0x888d95 : 0xe0e3e7);
       views.push({ digits, date, aod: isAod });
     }
-    distanceLabel = hmUI.createWidget(hmUI.widget.TEXT, { x: 334, y: 106, w: 70, h: 19, text_size: 12,
-      color: 0xafb4bc, align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V,
-      text_style: hmUI.text_style.NONE, text: '', show_level: normal });
+    distanceLabel = text(334, 104, 70, 20, 13, 'KM', normal);
     metric(65, 129, 93, 27, hmUI.data_type.CAL, 'small');
     metric(322, 129, 94, 27, hmUI.data_type.DISTANCE, 'small');
     metric(205, 87, 70, 29, hmUI.data_type.HEART, 'heart');
