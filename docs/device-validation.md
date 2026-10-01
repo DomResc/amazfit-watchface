@@ -19,7 +19,7 @@ Do not reuse an appId or deviceSource from an earlier chat without current evide
 | --- | --- | --- |
 | Unit tests | Passed locally | npm test: 8 tests, including actual entrypoint and release configuration; packaging tests run separately |
 | Strict typecheck | Passed locally | TypeScript 5.9.3, npm run typecheck |
-| Build and package inspection | Passed locally | Node 24.19.0, Zeus 1.9.3; Essential 0.1.2, appId 1092702, deviceSource 10486017; device ZIP identity, resources, preview and black padding checked |
+| Build and package inspection | Passed locally | Node 24.19.0, Zeus 1.9.3; Essential 0.1.3, appId 1092702, deviceSource 10486017; device ZIP identity, resources, preview and black padding checked |
 | Simulator | Not run | Configuration and observed behavior |
 | Physical installation | User confirmed for 0.1.0 | Installed through Gadgetbridge on Balance 2 XT; firmware still pending |
 | Normal / AOD / wake | User confirmed watchface and AOD work and update correctly on 0.1.0 | AOD illuminated area and detailed wake-cycle checks remain pending |
@@ -48,3 +48,7 @@ The documented watchface API [hmSetting.getDeviceInfo()](https://docs.zepp.com/d
 ## Preview validation — 2026-10-01
 
 The user confirmed the watch selection preview in 0.1.1 is correct. Gadgetbridge still displayed a red stripe. Version 0.1.2 clears all RGB565 padding bits; the package and two regression tests pass locally. The user accepted the corrected Gadgetbridge preview.
+
+## Expanded build targets — 2026-10-01
+
+Essential 0.1.3 builds 40 deviceSource variants from the checked-in round 480 × 480 Zeus catalog. All 40 device ZIPs passed local identity, version, target and resource checks. Layout and runtime behavior are unchanged. Other devices are not physically verified; expanded GitHub release execution remains pending. Packaging tests now include supported shared groups and rejection of unlisted targets.

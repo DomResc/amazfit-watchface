@@ -1,6 +1,6 @@
 # Essential
 
-A minimal digital watchface for Amazfit Balance 2 XT (`deviceSource: 10486017`), designed for local installation through Gadgetbridge.
+A minimal digital watchface for round 480 × 480 Zepp OS devices, designed for local installation through Gadgetbridge. See [build targets](TARGETS.md); Balance 2 XT (`10486017`) is the physically tested device.
 
 ## Behavior
 
@@ -34,13 +34,13 @@ npm install --global @zeppos/zeus-cli@1.9.3
 
 The build does not upload or publish. It extracts the device ZIP from Zeus's bundle and checks app identity, version, explicit target and required resources.
 
-Output: `dist/essential-0.1.2-10486017.zip`.
+Output: `dist/install/essential-0.1.3-<deviceSource>.zip`, one ZIP per catalog target. All expected targets must compile and pass package validation before release.
 
 ## Local installation
 
 App ID `1092702` is a local development identity, not a portal-issued publication ID. Keep it stable across updates and do not reuse it for another installed personal watchface.
 
-1. Copy the generated device ZIP to your Android phone.
+1. Copy the generated ZIP matching your deviceSource to your Android phone.
 2. Connect the Balance 2 XT in Gadgetbridge.
 3. Open the ZIP with Gadgetbridge's FW/App installer and verify it identifies Essential as a watchface.
 4. Install, then select Essential on the watch.

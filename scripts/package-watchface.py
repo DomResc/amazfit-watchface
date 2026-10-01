@@ -1,4 +1,4 @@
-"""Extract and validate an explicit Balance 2 XT device ZIP for local installation."""
+"""Extract and validate an round 480x480 device ZIPs for local installation."""
 import io
 import json
 import sys
@@ -20,15 +20,20 @@ def blacken_padding(data, width, height):
     return bytes(pixels)
 
 
-def extract_device(bundle_path, app_id, version):
+def extract_device(bundle_path, app_id, version, device_source=10486017):
     with zipfile.ZipFile(bundle_path) as bundle:
         manifest = json.loads(bundle.read('manifest.json'))
+        allowed = {d['deviceSource'] for d in json.loads(
+            (Path(__file__).resolve().parents[1] / 'src/watchfaces/essential/targets.json').read_text())['devices']}
         matches = [entry for entry in manifest['zpks']
-                   if entry['platforms'] == [{'deviceSource': 10486017}]
+                   if any(p['deviceSource'] == device_source for p in entry['platforms'])
                    and entry['appType'] == 'watchface'
                    and entry['version']['name'] == version]
         if len(matches) != 1:
-            raise ValueError('Expected exactly one explicit Balance 2 XT package')
+            raise ValueError(f'Expected exactly one package for {device_source}')
+        platforms = matches[0]['platforms']
+        if not platforms or any(p['deviceSource'] not in allowed for p in platforms):
+            raise ValueError('Bundle contains targets outside the round 480x480 catalog')
         with zipfile.ZipFile(io.BytesIO(bundle.read(matches[0]['name']))) as zpk:
             payload = zpk.read('device.zip')
         with zipfile.ZipFile(io.BytesIO(payload)) as device:
@@ -36,7 +41,7 @@ def extract_device(bundle_path, app_id, version):
             if (str(app['app']['appId']) != str(app_id)
                     or app['app']['version']['name'] != version
                     or app['app']['appType'] != 'watchface'
-                    or app['platforms'] != [{'deviceSource': 10486017}]):
+                    or app['platforms'] != platforms):
                 raise ValueError('Device identity or target does not match')
             for name in ['app.bin', 'watchface/index.bin', 'assets/icon.png']:
                 if not device.read(name):
@@ -62,10 +67,19 @@ def package(dist, app_id, version):
     candidates = sorted(dist.glob('*.zab'), key=lambda p: p.stat().st_mtime_ns)
     if not candidates:
         raise ValueError('No Zeus bundle found')
-    payload = extract_device(candidates[-1], app_id, version)
-    output = dist / f'essential-{version}-10486017.zip'
-    output.write_bytes(payload)
-    print(f'Validated local installation package: {output.name} ({len(payload)} bytes)')
+    catalog = json.loads((Path(__file__).resolve().parents[1] / 'src/watchfaces/essential/targets.json').read_text())
+    # Validate every expected package before writing the installation set.
+    packages = [(device['deviceSource'], extract_device(candidates[-1], app_id, version, device['deviceSource']))
+                for device in catalog['devices']]
+    install = dist / 'install'
+    install.mkdir(exist_ok=True)
+    for old in install.glob('essential-*.zip'):
+        old.unlink()
+    for device_source, payload in packages:
+        output = install / f'essential-{version}-{device_source}.zip'
+        output.write_bytes(payload)
+    print(f'Validated {len(packages)} round 480x480 installation ZIPs in dist/install')
+
 
 
 if __name__ == '__main__':

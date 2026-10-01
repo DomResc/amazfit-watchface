@@ -5,7 +5,7 @@ import {releaseConfig} from '../scripts/release-config.mjs';
 const manifest=JSON.parse(readFileSync(new URL('../src/watchfaces/essential/app.json',import.meta.url),'utf8'));
 test('release selects the ZIP matching the tagged manifest version',()=>{
  const version=manifest.app.version.name;
- assert.deepEqual(releaseConfig(`essential-v${version}`,manifest),{version,asset:`essential-${version}-10486017.zip`});
+ assert.deepEqual(releaseConfig(`essential-v${version}`,manifest),{version,asset:'install/*.zip'});
 });
 test('release rejects mismatched tags, malformed versions and other targets',()=>{
  for(const tag of ['v0.1.2','essential-v9.9.9','essential-v0.1.2; echo invalid'])assert.throws(()=>releaseConfig(tag,manifest));

@@ -43,7 +43,7 @@ Original project work is covered by the [MIT license](LICENSE). Record the origi
 
 ## Automatic GitHub releases
 
-Pushing a tag such as `essential-v0.1.2` starts the release workflow. The tag version must exactly match `src/watchfaces/essential/app.json`. After tests, typecheck and build succeed, the workflow publishes a GitHub Release with only the validated device ZIP attached. It does not submit anything to the Zepp store.
+Pushing a tag such as `essential-v0.1.3` starts the release workflow. The tag version must exactly match `src/watchfaces/essential/app.json`. After tests, typecheck and build succeed, the workflow publishes a GitHub Release with the validated device ZIPs from `dist/install` attached. Targets are limited to the checked-in [round 480 × 480 catalog](src/watchfaces/essential/TARGETS.md). It does not submit anything to the Zepp store.
 
 Create the tag on the committed revision containing the intended manifest, source and workflow, then push that tag. Ordinary branch pushes and pull requests only run validation. Published releases are not overwritten on reruns; an existing release causes publication to fail.
 

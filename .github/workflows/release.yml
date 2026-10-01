@@ -53,17 +53,17 @@ jobs:
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
           RELEASE_VERSION: ${{ needs.build.outputs.version }}
-          RELEASE_ASSET: ${{ needs.build.outputs.asset }}
         run: |
           cat > release-notes.md <<'NOTES'
-          Essential for Amazfit Balance 2 XT (deviceSource 10486017).
+          Essential for round 480 x 480 devices in the checked-in Zeus catalog.
 
-          Download the attached device ZIP and open it with Gadgetbridge for local installation.
+          Download the ZIP matching your deviceSource and open it with Gadgetbridge.
+          Balance 2 XT (10486017) was physically tested; other targets are build-validated only.
           Includes centered time, Italian/English date labels, device 12/24-hour preference and AOD.
 
           Tests, typecheck and package validation passed for this tagged revision.
           CI does not verify physical-device behavior or battery impact.
           NOTES
-          gh release create "$RELEASE_TAG" "release/$RELEASE_ASSET" \
+          gh release create "$RELEASE_TAG" release/*.zip \
             --repo "$GH_REPO" --verify-tag \
             --title "Essential $RELEASE_VERSION" --notes-file release-notes.md
