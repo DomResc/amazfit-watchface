@@ -13,6 +13,18 @@ packager = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(packager)
 
 
+class AssetNamingTests(unittest.TestCase):
+    def test_model_name_and_variant_are_included(self):
+        self.assertEqual(packager.asset_name('0.1.3', {'name': 'Amazfit Balance 2 XT', 'deviceSource': 10486017}),
+                         'essential-0.1.3-amazfit-balance-2-xt-10486017.zip')
+        self.assertEqual(packager.asset_name('0.1.3', {'name': 'Amazfit T-Rex 3 Pro (48mm)', 'deviceSource': 10551553}),
+                         'essential-0.1.3-amazfit-t-rex-3-pro-48mm-10551553.zip')
+
+    def test_same_model_variants_have_distinct_names(self):
+        self.assertNotEqual(packager.asset_name('0.1.3', {'name': 'Amazfit Balance 2 XT', 'deviceSource': 10486017}),
+                            packager.asset_name('0.1.3', {'name': 'Amazfit Balance 2 XT', 'deviceSource': 10486019}))
+
+
 class PreviewPaddingTests(unittest.TestCase):
     def test_padding_is_black_in_rgb565_and_content_is_preserved(self):
         header = bytes([46]) + bytes(63)

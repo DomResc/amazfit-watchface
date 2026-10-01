@@ -34,7 +34,7 @@ npm install --global @zeppos/zeus-cli@1.9.3
 
 The build does not upload or publish. It extracts the device ZIP from Zeus's bundle and checks app identity, version, explicit target and required resources.
 
-Output: `dist/install/essential-0.1.3-<deviceSource>.zip`, one ZIP per catalog target. All expected targets must compile and pass package validation before release.
+Output: `dist/install/essential-0.1.3-<model>-<deviceSource>.zip`, one ZIP per catalog target. All expected targets must compile and pass package validation before release.
 
 ## Local installation
 

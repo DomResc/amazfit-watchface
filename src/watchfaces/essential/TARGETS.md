@@ -23,4 +23,4 @@ Balance 2 XT (`10486017`) is physically tested. All other variants are build-val
 | Amazfit Balance 3 | 11141376, 11141377, 11141379 |
 | Amazfit Balance 3 Ti | 11145472, 11145473, 11145475 |
 
-The layout is unchanged. Each deviceSource has a named installation ZIP; Zeus may share one binary package across devices with matching CPU and display characteristics. Original group metadata is preserved.
+The layout is unchanged. Each deviceSource has an installation ZIP named with its model and deviceSource (for example, `essential-0.1.3-amazfit-balance-2-xt-10486017.zip`); Zeus may share one binary package across devices with matching CPU and display characteristics. Original group metadata is preserved.

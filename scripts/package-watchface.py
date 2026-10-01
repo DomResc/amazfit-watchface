@@ -1,10 +1,18 @@
 """Extract and validate an round 480x480 device ZIPs for local installation."""
 import io
+import re
 import json
 import sys
 import struct
 import zipfile
 from pathlib import Path
+
+
+def asset_name(version, device):
+    slug = re.sub(r'[^a-z0-9]+', '-', device['name'].lower()).strip('-')
+    if not slug:
+        raise ValueError('Device name must contain an ASCII letter or digit')
+    return f"essential-{version}-{slug}-{device['deviceSource']}.zip"
 
 
 def blacken_padding(data, width, height):
@@ -69,14 +77,14 @@ def package(dist, app_id, version):
         raise ValueError('No Zeus bundle found')
     catalog = json.loads((Path(__file__).resolve().parents[1] / 'src/watchfaces/essential/targets.json').read_text())
     # Validate every expected package before writing the installation set.
-    packages = [(device['deviceSource'], extract_device(candidates[-1], app_id, version, device['deviceSource']))
+    packages = [(device, extract_device(candidates[-1], app_id, version, device['deviceSource']))
                 for device in catalog['devices']]
     install = dist / 'install'
     install.mkdir(exist_ok=True)
     for old in install.glob('essential-*.zip'):
         old.unlink()
-    for device_source, payload in packages:
-        output = install / f'essential-{version}-{device_source}.zip'
+    for device, payload in packages:
+        output = install / asset_name(version, device)
         output.write_bytes(payload)
     print(f'Validated {len(packages)} round 480x480 installation ZIPs in dist/install')
 
