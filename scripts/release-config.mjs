@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 
 export function releaseConfig(tag, manifest, name = 'essential') {
   const version = manifest.app.version.name;
-  if (!['essential', 'matrix'].includes(name) ||
+  if (!['essential', 'matrix', 'retro-lcd'].includes(name) ||
       !/^\d+\.\d+\.\d+$/.test(version) || tag !== `${name}-v${version}`) {
     throw new Error('Release tag must equal <watchface>-v<manifest version>.');
   }
@@ -19,7 +19,7 @@ export function releaseConfig(tag, manifest, name = 'essential') {
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const tag = process.env.RELEASE_TAG;
-  const match = /^(essential|matrix)-v\d+\.\d+\.\d+$/.exec(tag || '');
+  const match = /^(essential|matrix|retro-lcd)-v\d+\.\d+\.\d+$/.exec(tag || '');
   if (!match) throw new Error('Unsupported watchface release tag.');
   const name = match[1];
   const manifest = JSON.parse(readFileSync(new URL(`../src/watchfaces/${name}/app.json`, import.meta.url), 'utf8'));

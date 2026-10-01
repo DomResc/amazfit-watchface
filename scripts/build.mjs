@@ -5,7 +5,7 @@ import path from 'node:path';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const name = process.argv[2];
-if (!['essential', 'matrix'].includes(name)) throw new Error('Usage: npm run build -- essential|matrix');
+if (!['essential', 'matrix', 'retro-lcd'].includes(name)) throw new Error('Usage: npm run build -- essential|matrix|retro-lcd');
 if (process.version !== 'v24.19.0') throw new Error('Use Node 24.19.0 (see .nvmrc).');
 const cwd = path.join(root, 'src/watchfaces', name);
 const manifest = JSON.parse(readFileSync(path.join(cwd, 'app.json'), 'utf8'));

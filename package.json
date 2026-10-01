@@ -8,9 +8,10 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "typecheck": "tsc --noEmit --project jsconfig.json && tsc --noEmit --project jsconfig.matrix.json",
+    "typecheck": "tsc --noEmit --project jsconfig.json && tsc --noEmit --project jsconfig.matrix.json && tsc --noEmit --project jsconfig.retro-lcd.json",
     "test": "node --experimental-vm-modules --test tests/*.test.mjs",
-    "test:packaging": "python3 -m unittest discover -s tests -p 'test_*.py' -v"
+    "test:packaging": "python3 -m unittest discover -s tests -p 'test_*.py' -v",
+    "preview:retro-lcd": "node scripts/preview-retro-lcd.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"

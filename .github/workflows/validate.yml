@@ -20,3 +20,4 @@ jobs:
       - run: npm install --global @zeppos/zeus-cli@1.9.3
       - run: npm run build -- essential
       - run: npm run build -- matrix
+      - run: npm run build -- retro-lcd

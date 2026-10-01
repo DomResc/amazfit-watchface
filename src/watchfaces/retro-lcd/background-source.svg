@@ -1,0 +1,75 @@
+<svg class="watch" viewBox="0 0 480 480" role="img" aria-label="Retro LCD concept based on Sensors. Illustrative data: time 18:19, 8240 steps, 486 calories, 45 active minutes, partly cloudy weather at 17 degrees Celsius, 7 hours 24 minutes of sleep, alarm 07:00 and battery 60 percent." style="--lcd-main: #8b9984;" xmlns="http://www.w3.org/2000/svg" width="480" height="480">
+      <defs>
+        <clipPath id="retro-sensors-circle"><circle cx="240" cy="240" r="230"></circle></clipPath>
+        <linearGradient id="retro-sensors-lcd" x1="0" y1="0" x2="0.1" y2="1">
+          <stop offset="0" stop-color="#4a5647"></stop>
+          <stop offset="0.09" stop-color="#8b9984"></stop>
+          <stop offset="0.87" stop-color="#8b9984"></stop>
+          <stop offset="1" stop-color="#65715d"></stop>
+        </linearGradient>
+        <linearGradient id="retro-sensors-fascia" x1="0" y1="0" x2="1" y2="1">
+          <stop stop-color="#171c17"></stop><stop offset="0.6" stop-color="#1e251e"></stop><stop offset="1" stop-color="#0c110d"></stop>
+        </linearGradient>
+        <filter id="retro-sensors-texture" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.82" numOctaves="3" seed="12"></feTurbulence>
+          <feColorMatrix type="saturate" values="0"></feColorMatrix>
+          <feComponentTransfer><feFuncA type="linear" slope="0"></feFuncA></feComponentTransfer>
+        </filter>
+        <filter id="retro-sensors-inset" x="-20%" y="-20%" width="140%" height="140%">
+          <feOffset in="SourceAlpha" dx="3" dy="4"></feOffset>
+          <feGaussianBlur stdDeviation="3" result="blur"></feGaussianBlur>
+          <feComposite in="SourceGraphic" in2="blur" operator="out" result="edge"></feComposite>
+          <feFlood flood-color="#000" flood-opacity="0.85"></feFlood>
+          <feComposite in2="edge" operator="in" result="shadow"></feComposite>
+          <feComposite in="shadow" in2="SourceGraphic" operator="over"></feComposite>
+        </filter>
+      </defs>
+      <circle cx="240" cy="240" r="239" fill="#000"></circle>
+      <g class="normal-view" clip-path="url(#retro-sensors-circle)">
+        <circle cx="240" cy="240" r="230" fill="#0b0d0c"></circle>
+        <path d="M10 10 H235 V220 Q235 237 219 237 H10Z" fill="#000000"></path>
+        <path d="M10 10 H235 V220 Q235 237 219 237 H10Z" fill="#fff" filter="url(#retro-sensors-texture)"></path>
+        <path d="M246 10 H470 V149 H259 Q246 149 246 136Z" fill="url(#retro-sensors-lcd)" filter="url(#retro-sensors-inset)"></path>
+        <path d="M259 159 H470 V237 H259 Q246 237 246 224 V172 Q246 159 259 159Z" fill="url(#retro-sensors-lcd)" filter="url(#retro-sensors-inset)"></path>
+        <path d="M10 249 H470 V480 H10Z" fill="url(#retro-sensors-lcd)" filter="url(#retro-sensors-inset)"></path>
+        <g opacity="0.35" fill="#fff" filter="url(#retro-sensors-texture)">
+          <path d="M246 10 H470 V149 H259 Q246 149 246 136Z"></path>
+          <path d="M259 159 H470 V237 H259 Q246 237 246 224 V172 Q246 159 259 159Z"></path>
+          <path d="M10 249 H470 V480 H10Z"></path>
+        </g>
+        <g transform="translate(144 140) rotate(-90)">
+          <circle r="73" fill="none" stroke="#2b332a" stroke-width="20"></circle>
+
+          <circle r="49" fill="none" stroke="#2b332a" stroke-width="20"></circle>
+
+          <circle r="25" fill="none" stroke="#2b332a" stroke-width="20"></circle>
+
+        </g>
+        <circle cx="144" cy="140" r="13" fill="#101512"></circle>
+
+
+
+
+
+
+
+        <svg viewBox="0 0 24 24" width="30" height="26" fill="none" stroke="#080a0a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" x="274" y="185"><path d="M2 4v16"></path><path d="M2 8h18a2 2 0 0 1 2 2v10"></path><path d="M2 17h20"></path><path d="M6 8v9"></path></svg>
+
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#080a0a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" x="93" y="262"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2 2"></path><path d="M5 3 2 6"></path><path d="m22 6-3-3"></path><path d="M6.38 18.7 4 21"></path><path d="M17.64 18.67 20 21"></path></svg>
+
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#080a0a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" x="278" y="264"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+
+
+
+
+
+
+
+
+        <path d="M105 426 H375 M210 426 V470 M270 426 V470" stroke="#4a5647" stroke-width="1" fill="none"></path>
+
+
+
+      </g>
+
+    </svg>

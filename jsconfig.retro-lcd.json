@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": [
+      "ES2020"
+    ],
+    "skipLibCheck": false
+  },
+  "include": [
+    "src/watchfaces/retro-lcd/app.js",
+    "src/watchfaces/retro-lcd/watchface/**/*.js",
+    "src/watchfaces/retro-lcd/types/**/*.d.ts"
+  ]
+}

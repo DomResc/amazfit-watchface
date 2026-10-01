@@ -4,6 +4,7 @@ on:
     tags:
       - 'essential-v*'
       - 'matrix-v*'
+      - 'retro-lcd-v*'
 permissions:
   contents: read
 concurrency:
