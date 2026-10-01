@@ -9,6 +9,8 @@ The first watchface, [Essential](src/watchfaces/essential/README.md), is impleme
 - [Development plan](docs/development-plan.md): architecture, milestones and validation.
 - [Device evidence](docs/device-validation.md): target information and physical checks.
 
+[Matrix](src/watchfaces/matrix/README.md) is the second independent watchface: retro dot-matrix time, activity metrics and a seconds dial with minimal AOD. Build it with `npm run build -- matrix`; the user confirmed a successful trial on Balance 2 XT. Detailed device checks remain pending.
+
 ## Repository layout
 
 ```text
@@ -43,8 +45,8 @@ Original project work is covered by the [MIT license](LICENSE). Record the origi
 
 ## Automatic GitHub releases
 
-Pushing a tag such as `essential-v0.1.3` starts the release workflow. The tag version must exactly match `src/watchfaces/essential/app.json`. After tests, typecheck and build succeed, the workflow publishes a GitHub Release with the validated device ZIPs from `dist/install` attached. Targets are limited to the checked-in [round 480 × 480 catalog](src/watchfaces/essential/TARGETS.md). It does not submit anything to the Zepp store.
+Pushing a tag such as `essential-v0.1.3` or `matrix-v0.1.0` starts the release workflow for that watchface only. The tag version must exactly match the selected watchface's `app.json`. After tests, typecheck and build succeed, the workflow publishes a GitHub Release with the validated device ZIPs from `dist/install` attached. Targets are limited to the selected watchface's checked-in round 480 × 480 catalog. Ordinary CI validates and builds both watchfaces. It does not submit anything to the Zepp store.
 
 Create the tag on the committed revision containing the intended manifest, source and workflow, then push that tag. Ordinary branch pushes and pull requests only run validation. Published releases are not overwritten on reruns; an existing release causes publication to fail.
 
-The workflow uses GitHub's automatic token; no personal access token is required. Only the publication job receives write permission. Remote release execution remains unverified until the first tag is pushed.
+The workflow uses GitHub's automatic token; no personal access token is required. Only the publication job receives write permission. Release publication must be verified for each pushed tag.

@@ -8,11 +8,11 @@ import zipfile
 from pathlib import Path
 
 
-def asset_name(version, device):
+def asset_name(version, device, name="essential"):
     slug = re.sub(r'[^a-z0-9]+', '-', device['name'].lower()).strip('-')
     if not slug:
         raise ValueError('Device name must contain an ASCII letter or digit')
-    return f"essential-{version}-{slug}-{device['deviceSource']}.zip"
+    return f"{name}-{version}-{slug}-{device['deviceSource']}.zip"
 
 
 def blacken_padding(data, width, height):
@@ -28,11 +28,11 @@ def blacken_padding(data, width, height):
     return bytes(pixels)
 
 
-def extract_device(bundle_path, app_id, version, device_source=10486017):
+def extract_device(bundle_path, app_id, version, device_source=10486017, name="essential"):
     with zipfile.ZipFile(bundle_path) as bundle:
         manifest = json.loads(bundle.read('manifest.json'))
         allowed = {d['deviceSource'] for d in json.loads(
-            (Path(__file__).resolve().parents[1] / 'src/watchfaces/essential/targets.json').read_text())['devices']}
+            (Path(__file__).resolve().parents[1] / f'src/watchfaces/{name}/targets.json').read_text())['devices']}
         matches = [entry for entry in manifest['zpks']
                    if any(p['deviceSource'] == device_source for p in entry['platforms'])
                    and entry['appType'] == 'watchface'
@@ -71,24 +71,24 @@ def extract_device(bundle_path, app_id, version, device_source=10486017):
         return output.getvalue()
 
 
-def package(dist, app_id, version):
+def package(dist, app_id, version, name="essential"):
     candidates = sorted(dist.glob('*.zab'), key=lambda p: p.stat().st_mtime_ns)
     if not candidates:
         raise ValueError('No Zeus bundle found')
-    catalog = json.loads((Path(__file__).resolve().parents[1] / 'src/watchfaces/essential/targets.json').read_text())
+    catalog = json.loads((Path(__file__).resolve().parents[1] / f'src/watchfaces/{name}/targets.json').read_text())
     # Validate every expected package before writing the installation set.
-    packages = [(device, extract_device(candidates[-1], app_id, version, device['deviceSource']))
+    packages = [(device, extract_device(candidates[-1], app_id, version, device['deviceSource'], name))
                 for device in catalog['devices']]
     install = dist / 'install'
     install.mkdir(exist_ok=True)
-    for old in install.glob('essential-*.zip'):
+    for old in install.glob(f'{name}-*.zip'):
         old.unlink()
     for device, payload in packages:
-        output = install / asset_name(version, device)
+        output = install / asset_name(version, device, name)
         output.write_bytes(payload)
     print(f'Validated {len(packages)} round 480x480 installation ZIPs in dist/install')
 
 
 
 if __name__ == '__main__':
-    package(Path(sys.argv[1]), sys.argv[2], sys.argv[3])
+    package(Path(sys.argv[1]), sys.argv[2], sys.argv[3], sys.argv[4] if len(sys.argv) > 4 else "essential")

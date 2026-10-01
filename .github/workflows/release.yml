@@ -1,8 +1,9 @@
-name: Release Essential
+name: Release Watchface
 on:
   push:
     tags:
       - 'essential-v*'
+      - 'matrix-v*'
 permissions:
   contents: read
 concurrency:
@@ -12,6 +13,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
+      name: ${{ steps.release.outputs.name }}
+      title: ${{ steps.release.outputs.title }}
       version: ${{ steps.release.outputs.version }}
       asset: ${{ steps.release.outputs.asset }}
     steps:
@@ -30,11 +33,14 @@ jobs:
       - run: npm run test:packaging
       - run: npm run typecheck
       - run: npm install --global @zeppos/zeus-cli@1.9.3
-      - run: npm run build -- essential
+      - name: Build selected watchface
+        env:
+          WATCHFACE_NAME: ${{ steps.release.outputs.name }}
+        run: npm run build -- "$WATCHFACE_NAME"
       - uses: actions/upload-artifact@v4
         with:
-          name: essential-release
-          path: src/watchfaces/essential/dist/${{ steps.release.outputs.asset }}
+          name: watchface-release
+          path: src/watchfaces/${{ steps.release.outputs.name }}/dist/${{ steps.release.outputs.asset }}
           if-no-files-found: error
           retention-days: 7
   publish:
@@ -43,27 +49,21 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
-          name: essential-release
+          name: watchface-release
           path: release
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           RELEASE_TAG: ${{ github.ref_name }}
+          WATCHFACE_NAME: ${{ needs.build.outputs.name }}
+          WATCHFACE_TITLE: ${{ needs.build.outputs.title }}
           RELEASE_VERSION: ${{ needs.build.outputs.version }}
         run: |
-          cat > release-notes.md <<'NOTES'
-          Essential for round 480 x 480 devices in the checked-in Zeus catalog.
-
-          Download the ZIP matching your deviceSource and open it with Gadgetbridge.
-          Balance 2 XT (10486017) was physically tested; other targets are build-validated only.
-          Includes centered time, Italian/English date labels, device 12/24-hour preference and AOD.
-
-          Tests, typecheck and package validation passed for this tagged revision.
-          CI does not verify physical-device behavior or battery impact.
-          NOTES
           gh release create "$RELEASE_TAG" release/*.zip \
             --repo "$GH_REPO" --verify-tag \
-            --title "Essential $RELEASE_VERSION" --notes-file release-notes.md
+            --title "$WATCHFACE_TITLE $RELEASE_VERSION" \
+            --notes-file "src/watchfaces/$WATCHFACE_NAME/RELEASE_NOTES.md"

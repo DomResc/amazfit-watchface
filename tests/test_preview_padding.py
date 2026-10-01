@@ -20,6 +20,13 @@ class AssetNamingTests(unittest.TestCase):
         self.assertEqual(packager.asset_name('0.1.3', {'name': 'Amazfit T-Rex 3 Pro (48mm)', 'deviceSource': 10551553}),
                          'essential-0.1.3-amazfit-t-rex-3-pro-48mm-10551553.zip')
 
+    def test_matrix_name_does_not_collide_with_essential(self):
+        device = {'name': 'Amazfit Balance 2 XT', 'deviceSource': 10486017}
+        self.assertEqual(packager.asset_name('0.1.0', device, 'matrix'),
+                         'matrix-0.1.0-amazfit-balance-2-xt-10486017.zip')
+        self.assertNotEqual(packager.asset_name('0.1.0', device, 'matrix'),
+                            packager.asset_name('0.1.0', device))
+
     def test_same_model_variants_have_distinct_names(self):
         self.assertNotEqual(packager.asset_name('0.1.3', {'name': 'Amazfit Balance 2 XT', 'deviceSource': 10486017}),
                             packager.asset_name('0.1.3', {'name': 'Amazfit Balance 2 XT', 'deviceSource': 10486019}))
@@ -46,13 +53,13 @@ class PreviewPaddingTests(unittest.TestCase):
 
 
 class TargetPackageTests(unittest.TestCase):
-    def make_bundle(self, path, platforms):
+    def make_bundle(self, path, platforms, app_id=1092702):
         preview = bytearray(64 + 336 * 324 * 2)
         preview[0] = 46
         preview[2] = 2
         preview[16] = 16
         struct.pack_into('<HH', preview, 12, 336, 324)
-        app = {'app': {'appId': 1092702, 'appType': 'watchface',
+        app = {'app': {'appId': app_id, 'appType': 'watchface',
                        'version': {'name': '0.1.3'}}, 'platforms': platforms}
         device = io.BytesIO()
         with zipfile.ZipFile(device, 'w') as archive:
@@ -82,6 +89,15 @@ class TargetPackageTests(unittest.TestCase):
                 packager.extract_device(path, 1092702, '0.1.3', 8519937)
             with self.assertRaises(ValueError):
                 packager.extract_device(path, 1, '0.1.3', 10486017)
+
+    def test_matrix_uses_its_own_restricted_catalog(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'bundle.zab'
+            self.make_bundle(path, [{'deviceSource': 10486017}, {'deviceSource': 10486019}], 1092703)
+            packager.extract_device(path, 1092703, '0.1.3', 10486017, 'matrix')
+            self.make_bundle(path, [{'deviceSource': 10486017}, {'deviceSource': 230}], 1092703)
+            with self.assertRaises(ValueError):
+                packager.extract_device(path, 1092703, '0.1.3', 10486017, 'matrix')
 
     def test_package_with_an_unlisted_target_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:

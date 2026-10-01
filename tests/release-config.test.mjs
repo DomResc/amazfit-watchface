@@ -14,3 +14,13 @@ test('release rejects mismatched tags, malformed versions and other targets',()=
  const wrongTarget=structuredClone(manifest);wrongTarget.targets['balance-2-xt'].platforms[0].deviceSource=1;
  assert.throws(()=>releaseConfig(`essential-v${manifest.app.version.name}`,wrongTarget));
 });
+test('Matrix releases select only the Matrix manifest and target catalog',()=>{
+ const matrix=JSON.parse(readFileSync(new URL('../src/watchfaces/matrix/app.json',import.meta.url),'utf8'));
+ assert.deepEqual(releaseConfig(`matrix-v${matrix.app.version.name}`,matrix,'matrix'),{version:'0.1.0',asset:'install/*.zip'});
+ assert.throws(()=>releaseConfig('essential-v0.1.0',matrix,'matrix'));
+ assert.throws(()=>releaseConfig('matrix-v0.1.0',matrix));
+ assert.throws(()=>releaseConfig('other-v0.1.0',matrix,'other'));
+ const modified=structuredClone(matrix);
+ modified.targets['balance-2-xt'].platforms.push({deviceSource:230,name:'Amazfit GTR 3 Pro'});
+ assert.throws(()=>releaseConfig('matrix-v0.1.0',modified,'matrix'));
+});

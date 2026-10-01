@@ -1,0 +1,21 @@
+{
+  "shape": "round",
+  "resolution": [
+    480,
+    480
+  ],
+  "devices": [
+    {
+      "deviceSource": 10486016,
+      "name": "Amazfit Balance 2 XT"
+    },
+    {
+      "deviceSource": 10486017,
+      "name": "Amazfit Balance 2 XT"
+    },
+    {
+      "deviceSource": 10486019,
+      "name": "Amazfit Balance 2 XT"
+    }
+  ]
+}
