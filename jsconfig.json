@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "strict": true,
+    "noEmit": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2020"],
+    "skipLibCheck": false
+  },
+  "include": ["src/watchfaces/essential/app.js", "src/watchfaces/essential/watchface/**/*.js", "src/watchfaces/essential/types/**/*.d.ts"]
+}

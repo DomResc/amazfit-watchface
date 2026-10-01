@@ -1,0 +1,52 @@
+{
+  "configVersion": "v3",
+  "app": {
+    "appId": 1092702,
+    "appName": "Essential",
+    "appType": "watchface",
+    "version": {
+      "code": 3,
+      "name": "0.1.2"
+    },
+    "icon": "icon.png",
+    "vender": "Domenico Rescigno",
+    "description": "Centered time and date with Italian and English labels and a dedicated AOD."
+  },
+  "permissions": [],
+  "runtime": {
+    "apiVersion": {
+      "compatible": "1.0.0",
+      "target": "1.0.1",
+      "minVersion": "1.0.0"
+    }
+  },
+  "targets": {
+    "balance-2-xt": {
+      "module": {
+        "watchface": {
+          "path": "watchface/index",
+          "main": 1,
+          "editable": 0,
+          "lockscreen": 1,
+          "photoscreen": 0
+        }
+      },
+      "platforms": [
+        {
+          "name": "Amazfit Balance 2 XT",
+          "deviceSource": 10486017
+        }
+      ],
+      "designWidth": 480
+    }
+  },
+  "i18n": {
+    "en-US": {
+      "appName": "Essential"
+    },
+    "it-IT": {
+      "appName": "Essential"
+    }
+  },
+  "defaultLanguage": "en-US"
+}

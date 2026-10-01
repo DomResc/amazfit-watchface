@@ -22,7 +22,7 @@ Create a maintainable personal watchface portfolio, starting with one small Bala
 
 Record model, firmware, display characteristics and deviceSource with traceable evidence in `device-validation.md`. Confirm an owned app identity. Prepare and approve normal/AOD previews before substantial visual implementation.
 
-Proposed first scope: time, date, 12/24-hour preference and AOD. Sensors, editable complications and themes follow only when requested and after the basic lifecycle works.
+First scope: time, date, 12/24-hour preference and AOD. Support Italian and English date labels, following the device language with English as the fallback. Keep the same centered layout in both languages. Sensors, editable complications and themes follow only when requested and after the basic lifecycle works.
 
 ### 2. Add one executable watchface and toolchain
 

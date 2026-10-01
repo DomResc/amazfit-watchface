@@ -1,0 +1,69 @@
+name: Release Essential
+on:
+  push:
+    tags:
+      - 'essential-v*'
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      asset: ${{ steps.release.outputs.asset }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.19.0'
+          cache: npm
+      - name: Verify tag and manifest
+        id: release
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: node scripts/release-config.mjs >> "$GITHUB_OUTPUT"
+      - run: npm ci
+      - run: npm test
+      - run: npm run test:packaging
+      - run: npm run typecheck
+      - run: npm install --global @zeppos/zeus-cli@1.9.3
+      - run: npm run build -- essential
+      - uses: actions/upload-artifact@v4
+        with:
+          name: essential-release
+          path: src/watchfaces/essential/dist/${{ steps.release.outputs.asset }}
+          if-no-files-found: error
+          retention-days: 7
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: essential-release
+          path: release
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_VERSION: ${{ needs.build.outputs.version }}
+          RELEASE_ASSET: ${{ needs.build.outputs.asset }}
+        run: |
+          cat > release-notes.md <<'NOTES'
+          Essential for Amazfit Balance 2 XT (deviceSource 10486017).
+
+          Download the attached device ZIP and open it with Gadgetbridge for local installation.
+          Includes centered time, Italian/English date labels, device 12/24-hour preference and AOD.
+
+          Tests, typecheck and package validation passed for this tagged revision.
+          CI does not verify physical-device behavior or battery impact.
+          NOTES
+          gh release create "$RELEASE_TAG" "release/$RELEASE_ASSET" \
+            --repo "$GH_REPO" --verify-tag \
+            --title "Essential $RELEASE_VERSION" --notes-file release-notes.md
