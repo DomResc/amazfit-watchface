@@ -2,49 +2,49 @@
 export const LAYOUT = {
   "time": {
     "digits": [
-      100,
-      157,
-      228,
-      285
+      180,
+      229,
+      290,
+      339
     ],
-    "colon": 214,
-    "y": 303
+    "colon": 278,
+    "y": 285
   },
   "date": {
     "digits": [
-      212,
-      235,
-      276,
-      299
+      210,
+      233,
+      279,
+      302
     ],
-    "dash": 258,
-    "y": 387
+    "dash": 256,
+    "y": 376
   },
   "weekday": {
     "x": 129,
-    "y": 391
+    "y": 380
   },
   "period": {
-    "x": 205,
-    "y": 276
+    "x": 275,
+    "y": 258
   },
   "seconds": {
-    "x": 346,
-    "y": 347
+    "x": 388,
+    "y": 319
   },
   "secondsLabel": {
-    "x": 350,
-    "y": 324
+    "x": 392,
+    "y": 296
   },
   "alarm": {
-    "x": 129,
-    "y": 266,
-    "w": 85,
-    "h": 24
+    "x": 87,
+    "y": 288,
+    "w": 76,
+    "h": 22
   },
   "battery": {
-    "x": 313,
-    "y": 268
+    "x": 87,
+    "y": 322
   },
   "alarmStatus": {
     "x": 150,
@@ -63,25 +63,25 @@ export const LAYOUT = {
     "y": 57,
     "icons": [
       {
-        "x": 135,
+        "x": 138,
         "y": 58,
         "name": "footprints"
       },
       {
-        "x": 135,
+        "x": 138,
         "y": 82,
         "name": "flame"
       },
       {
-        "x": 135,
+        "x": 138,
         "y": 106,
         "name": "timer"
       }
     ]
   },
   "weather": {
-    "x": 265,
-    "y": 77,
+    "x": 263,
+    "y": 75,
     "temperature": {
       "center": 330,
       "y": 70,
@@ -103,27 +103,27 @@ export const LAYOUT = {
   },
   "aod": {
     "digits": [
-      100,
-      157,
-      228,
-      285
+      180,
+      229,
+      290,
+      339
     ],
-    "colon": 214,
-    "y": 303,
+    "colon": 278,
+    "y": 285,
     "weekday": {
       "x": 129,
-      "y": 391
+      "y": 380
     }
   },
   "aodDate": {
     "digits": [
-      212,
-      235,
-      276,
-      299
+      210,
+      233,
+      279,
+      302
     ],
-    "dash": 258,
-    "y": 387
+    "dash": 256,
+    "y": 376
   }
 };
 /** @param {string} style */
@@ -133,23 +133,23 @@ export function fontArray(style) {
 /** @type {Record<string, Record<string, number>>} */
 export const GLYPH_WIDTHS = {
   "time": {
-    "0": 57,
-    "1": 57,
-    "2": 57,
-    "3": 57,
-    "4": 57,
-    "5": 57,
-    "6": 57,
-    "7": 57,
-    "8": 57,
-    "9": 57,
-    "dash": 57,
-    "colon": 14,
-    "dot": 1,
-    "degree": 57,
-    "slash": 46,
-    "C": 57,
-    "blank": 14
+    "0": 49,
+    "1": 49,
+    "2": 49,
+    "3": 49,
+    "4": 49,
+    "5": 49,
+    "6": 49,
+    "7": 49,
+    "8": 49,
+    "9": 49,
+    "dash": 49,
+    "colon": 12,
+    "dot": 10,
+    "degree": 49,
+    "C": 49,
+    "blank": 12,
+    "slash": 39
   },
   "date": {
     "0": 23,
@@ -164,30 +164,30 @@ export const GLYPH_WIDTHS = {
     "9": 23,
     "dash": 23,
     "colon": 6,
-    "dot": 1,
+    "dot": 6,
     "degree": 23,
-    "slash": 18,
     "C": 23,
-    "blank": 6
+    "blank": 6,
+    "slash": 18
   },
   "alarm": {
-    "0": 20,
-    "1": 20,
-    "2": 20,
-    "3": 20,
-    "4": 20,
-    "5": 20,
-    "6": 20,
-    "7": 20,
-    "8": 20,
-    "9": 20,
-    "dash": 20,
-    "colon": 5,
-    "dot": 1,
-    "degree": 20,
-    "slash": 16,
-    "C": 20,
-    "blank": 5
+    "0": 18,
+    "1": 18,
+    "2": 18,
+    "3": 18,
+    "4": 18,
+    "5": 18,
+    "6": 18,
+    "7": 18,
+    "8": 18,
+    "9": 18,
+    "dash": 18,
+    "colon": 4,
+    "dot": 5,
+    "degree": 18,
+    "C": 18,
+    "blank": 4,
+    "slash": 14
   },
   "seconds": {
     "0": 21,
@@ -202,30 +202,30 @@ export const GLYPH_WIDTHS = {
     "9": 21,
     "dash": 21,
     "colon": 5,
-    "dot": 1,
+    "dot": 6,
     "degree": 21,
-    "slash": 17,
     "C": 21,
-    "blank": 5
+    "blank": 5,
+    "slash": 17
   },
   "aod": {
-    "0": 57,
-    "1": 57,
-    "2": 57,
-    "3": 57,
-    "4": 57,
-    "5": 57,
-    "6": 57,
-    "7": 57,
-    "8": 57,
-    "9": 57,
-    "dash": 57,
-    "colon": 14,
-    "dot": 1,
-    "degree": 57,
-    "slash": 46,
-    "C": 57,
-    "blank": 14
+    "0": 49,
+    "1": 49,
+    "2": 49,
+    "3": 49,
+    "4": 49,
+    "5": 49,
+    "6": 49,
+    "7": 49,
+    "8": 49,
+    "9": 49,
+    "dash": 49,
+    "colon": 12,
+    "dot": 10,
+    "degree": 49,
+    "C": 49,
+    "blank": 12,
+    "slash": 39
   },
   "aod-date": {
     "0": 23,
@@ -240,11 +240,11 @@ export const GLYPH_WIDTHS = {
     "9": 23,
     "dash": 23,
     "colon": 6,
-    "dot": 1,
+    "dot": 6,
     "degree": 23,
-    "slash": 18,
     "C": 23,
-    "blank": 6
+    "blank": 6,
+    "slash": 18
   },
   "temperature": {
     "0": 31,
@@ -259,11 +259,11 @@ export const GLYPH_WIDTHS = {
     "9": 31,
     "dash": 31,
     "colon": 8,
-    "dot": 1,
+    "dot": 7,
     "degree": 31,
-    "slash": 25,
     "C": 31,
-    "blank": 8
+    "blank": 8,
+    "slash": 25
   },
   "range": {
     "0": 16,
@@ -278,11 +278,11 @@ export const GLYPH_WIDTHS = {
     "9": 16,
     "dash": 16,
     "colon": 4,
-    "dot": 1,
+    "dot": 5,
     "degree": 16,
-    "slash": 13,
     "C": 16,
-    "blank": 4
+    "blank": 4,
+    "slash": 13
   },
   "sleep": {
     "0": 29,
@@ -297,10 +297,73 @@ export const GLYPH_WIDTHS = {
     "9": 29,
     "dash": 29,
     "colon": 7,
-    "dot": 1,
+    "dot": 7,
     "degree": 29,
-    "slash": 23,
     "C": 29,
-    "blank": 7
+    "blank": 7,
+    "slash": 23
+  }
+};
+/** @type {Record<string, {left:number,right:number}>} */
+export const DATE_INK_BOUNDS = {
+  "0": {
+    "left": 3,
+    "right": 20
+  },
+  "1": {
+    "left": 16,
+    "right": 20
+  },
+  "2": {
+    "left": 3,
+    "right": 20
+  },
+  "3": {
+    "left": 4,
+    "right": 20
+  },
+  "4": {
+    "left": 3,
+    "right": 20
+  },
+  "5": {
+    "left": 3,
+    "right": 20
+  },
+  "6": {
+    "left": 3,
+    "right": 20
+  },
+  "7": {
+    "left": 3,
+    "right": 20
+  },
+  "8": {
+    "left": 3,
+    "right": 20
+  },
+  "9": {
+    "left": 3,
+    "right": 20
+  },
+  "dash": {
+    "left": 5,
+    "right": 18
+  },
+  "colon": {
+    "left": 1,
+    "right": 5
+  },
+  "dot": {
+    "left": 1,
+    "right": 5
+  },
+  "degree": {
+    "left": 3,
+    "right": 20
+  },
+  "C": {
+    "left": 3,
+    "right": 18
   }
 };

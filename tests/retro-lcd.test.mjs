@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFile, access } from 'node:fs/promises';
 import { formatDisplay, progressLevel } from '../src/watchfaces/retro-lcd/watchface/format.js';
+import { LAYOUT, DATE_INK_BOUNDS } from '../src/watchfaces/retro-lcd/watchface/layout.js';
 import { releaseConfig } from '../scripts/release-config.mjs';
 const sample = {hour:14,minute:9,month:10,day:1,week:4};
 test('Retro LCD respects 12/24-hour settings, noon, midnight and missing data',()=>{
@@ -67,10 +68,10 @@ test('lifecycle detaches every sensor, refreshes resume and suppresses unchanged
   h.sensors[1].current=100;
   h.delegate.resume_call();
   assert.equal(h.widgets.find(w=>w.options.src?.startsWith('period/')).options.src,'period/AM.png');
-  assert.equal(h.widgets.find(w=>w.options.x===129 && w.options.y===391).options.src,'week/it/5.png');
+  assert.equal(h.widgets.find(w=>w.options.x===129 && w.options.y===380).options.src,'week/it/5.png');
   assert.equal(h.widgets.filter(w=>w.options.src?.startsWith('ring/')).length,3);
   assert.equal(h.sensors.length,7);
-  assert.equal(h.widgets.find(w=>w.options.x===313 && w.options.y===268).options.src,'battery/10.png');
+  assert.equal(h.widgets.find(w=>w.options.x===87 && w.options.y===322).options.src,'battery/10.png');
   h.definition.build();assert.ok(h.sensors.slice(0,7).every(s=>s.listeners.size===0));
   h.definition.onDestroy();h.delegate.resume_call();assert.ok(h.sensors.every(s=>s.listeners.size===0));
 });
@@ -85,9 +86,14 @@ test('approved geometry aligns second bottoms and contains only icon activity ri
   const h=await harness();
   const alarm=h.widgets.find(w=>w.id===h.kinds.TEXT_IMG && w.options.type===4).options;
   assert.equal(alarm.padding,true);
-  assert.ok(alarm.w >= 4 * 20 + 5);
+  const battery = h.widgets.find(w=>w.options.src?.startsWith('battery/')).options;
+  assert.equal(alarm.x, battery.x);
+  assert.equal(alarm.w, 76);
+  assert.equal(alarm.y, 288);
+  assert.equal(battery.y, 322);
+  assert.ok(alarm.w >= 4 * 16 + 4);
   const seconds=h.widgets.find(w=>w.id===h.kinds.IMG_TIME).options;
-  assert.equal(seconds.second_startY+26,303+70);
+  assert.equal(seconds.second_startY+26,285+60);
   assert.equal(h.widgets.filter(w=>w.options.src?.startsWith('icons/')).length,3);
   assert.equal(h.widgets.filter(w=>w.id===h.kinds.TEXT_IMG).length,1);
   assert.equal(h.widgets.find(w=>w.options.src?.startsWith('period/')).options.src,'period/blank.png');
@@ -112,17 +118,21 @@ test('weather and sleep refresh on resume, invalid data uses placeholders',async
 
 test('normal date uses day/month and status captions share one baseline',async()=>{
   const h=await harness();
-  const date=h.widgets.filter(w=>w.options.y===387 && w.options.show_level===1).sort((a,b)=>a.options.x-b.options.x).map(w=>w.options.src);
-  assert.deepEqual(date,['digits/date/0.png','digits/date/1.png','digits/date/slash.png','digits/date/1.png','digits/date/0.png']);
+  const date=h.widgets.filter(w=>w.options.y===376 && w.options.show_level===1).sort((a,b)=>a.options.x-b.options.x).map(w=>w.options.src);
+  assert.deepEqual(date,['digits/date/0.png','digits/date/1.png','digits/date/dash.png','digits/date/1.png','digits/date/0.png']);
   assert.ok(h.widgets.filter(w=>w.id===h.kinds.IMG_STATUS).every(w=>w.options.y===435));
 });
 
-test('AOD shares normal time/date geometry and stays free of secondary data',async()=>{
+test('AOD shares the updated normal time/date geometry and stays free of secondary data',async()=>{
   const h=await harness();
   const normalTime=h.widgets.filter(w=>w.options.src?.startsWith('digits/time/') && w.options.show_level===1);
   const aodTime=h.widgets.filter(w=>w.options.src?.startsWith('digits/aod/') && w.options.show_level===2);
   assert.deepEqual(aodTime.map(w=>[w.options.x,w.options.y]),normalTime.map(w=>[w.options.x,w.options.y]));
-  assert.ok(h.widgets.some(w=>w.options.src==='digits/aod-date/slash.png' && w.options.y===387));
+  assert.ok(normalTime.every(w=>w.options.y===285));
+  assert.ok(h.widgets.some(w=>w.options.src==='digits/aod-date/dash.png' && w.options.y===376));
+  const normalDate = h.widgets.filter(w=>w.options.src?.startsWith('digits/date/'));
+  const aodDate = h.widgets.filter(w=>w.options.src?.startsWith('digits/aod-date/'));
+  assert.deepEqual(aodDate.map(w=>[w.options.x,w.options.y]),normalDate.map(w=>[w.options.x,w.options.y]));
   assert.ok(h.widgets.filter(w=>w.options.show_level===2).every(w=>w.options.src?.startsWith('digits/') || w.options.src?.startsWith('week/')));
 });
 
@@ -133,4 +143,22 @@ test('Retro LCD includes the full round 480 by 480 target catalog',async()=>{
   const manifest=JSON.parse(await readFile(new URL('retro-lcd/app.json',base),'utf8'));
   assert.deepEqual(actual,expected);
   assert.deepEqual(manifest.targets['balance-2-xt'].platforms,expected.devices);
+});
+
+test('date dash centers between visible day and month ink in normal and AOD views',async()=>{
+  const h=await harness();
+  for(const [day,month] of [[2,1],[2,10],[11,11],[20,12],[0,0]]){
+    Object.assign(h.sensors[0],{day,month});h.tick();
+    const value=day===0?'----':String(day).padStart(2,'0')+String(month).padStart(2,'0');
+    const dayGlyph=DATE_INK_BOUNDS[value[1]==='-'?'dash':value[1]];
+    const monthGlyph=DATE_INK_BOUNDS[value[2]==='-'?'dash':value[2]];
+    const expected=(LAYOUT.date.digits[1]+dayGlyph.right+LAYOUT.date.digits[2]+monthGlyph.left)/2;
+    const separators=h.widgets.filter(w=>['digits/date/dash.png','digits/aod-date/dash.png'].includes(w.options.src));
+    for(const mode of [1,2]){
+      const separator=separators.find(w=>w.options.show_level===mode && !LAYOUT.date.digits.includes(w.options.x));
+      assert.ok(separator);
+      const actual=separator.options.x+(DATE_INK_BOUNDS.dash.left+DATE_INK_BOUNDS.dash.right)/2;
+      assert.ok(Math.abs(actual-expected)<=0.5);
+    }
+  }
 });

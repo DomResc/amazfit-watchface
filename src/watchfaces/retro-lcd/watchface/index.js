@@ -1,5 +1,5 @@
 import { formatDisplay, progressLevel } from './format';
-import { LAYOUT, fontArray, GLYPH_WIDTHS } from './layout';
+import { LAYOUT, fontArray, GLYPH_WIDTHS, DATE_INK_BOUNDS } from './layout';
 /** @type {RetroSensor | undefined} */
 let time;
 /** @type {RetroSensor | undefined} */
@@ -26,6 +26,8 @@ let views = [];
 let dates = [];
 /** @type {RetroWidget[]} */
 let aodDates = [];
+/** @type {{widget:RetroWidget,layout:typeof LAYOUT.date,aod:boolean}[]} */
+let dateSeparators = [];
 /** @type {RetroWidget | undefined} */
 let period;
 /** @type {RetroWidget | undefined} */
@@ -45,8 +47,20 @@ function update() {
     const [locale, day] = display.weekday.split('/');
     write(view.weekday, `week/${view.aod ? 'aod-' : ''}${locale}/${day}.png`);
   }
-  dates.forEach((widget, i) => write(widget, `digits/date/${(display.date.slice(2) + display.date.slice(0,2))[i] === '-' ? 'dash' : (display.date.slice(2) + display.date.slice(0,2))[i]}.png`));
-  aodDates.forEach((widget, i) => write(widget, `digits/aod-date/${(display.date.slice(2) + display.date.slice(0,2))[i] === '-' ? 'dash' : (display.date.slice(2) + display.date.slice(0,2))[i]}.png`));
+  const dateGlyphs = Array.from(display.date.slice(2) + display.date.slice(0,2), char => char === '-' ? 'dash' : char);
+  dates.forEach((widget,i) => write(widget, `digits/date/${dateGlyphs[i]}.png`));
+  aodDates.forEach((widget,i) => write(widget, `digits/aod-date/${dateGlyphs[i]}.png`));
+  for (const separator of dateSeparators) {
+    const day = DATE_INK_BOUNDS[dateGlyphs[1]];
+    const month = DATE_INK_BOUNDS[dateGlyphs[2]];
+    const dash = DATE_INK_BOUNDS.dash;
+    const x = Math.round((separator.layout.digits[1]+day.right+separator.layout.digits[2]+month.left-dash.left-dash.right)/2);
+    const key = `date-separator:${x}`;
+    if (previous.get(separator.widget) !== key) {
+      separator.widget.setProperty(hmUI.prop.MORE, {src:`digits/${separator.aod ? 'aod-date' : 'date'}/dash.png`, x});
+      previous.set(separator.widget,key);
+    }
+  }
   write(period, `period/${display.period}.png`);
   updateMetrics();
   updateConditions();
@@ -82,7 +96,7 @@ function updateConditions() {
   write(weatherIcon, `weather/${typeof index === 'number' && index >= 0 && index <= 28 ? index : 25}.png`);
   if (fields.length === 3) {
     fieldText(fields[0], temperature(weather && weather.current));
-    fieldText(fields[1], `${temperature(today && today.low)}° / ${temperature(today && today.high)}°C`);
+    fieldText(fields[1], `${temperature(today && today.low)}° - ${temperature(today && today.high)}°C`);
     const minutes = sleep && sleep.getTotalTime ? sleep.getTotalTime() : NaN;
     fieldText(fields[2], Number.isInteger(minutes) && minutes > 0 && minutes <= 1440 ? `${Math.floor(minutes / 60)}:${String(minutes % 60).padStart(2,'0')}` : '--:--');
   }
@@ -118,7 +132,7 @@ function image(x, y, src, level) {
 }
 WatchFace({
   build() {
-    pause(); destroyed = false; views = []; dates = []; aodDates = []; previous.clear(); rings = []; fields = [];
+    pause(); destroyed = false; views = []; dates = []; aodDates = []; dateSeparators = []; previous.clear(); rings = []; fields = [];
     time = hmSensor.createSensor(hmSensor.id.TIME);
     battery = hmSensor.createSensor(hmSensor.id.BATTERY);
     activity = [hmSensor.id.STEP, hmSensor.id.CALORIE, hmSensor.id.FAT_BURRING].map(id => hmSensor.createSensor(id));
@@ -136,9 +150,9 @@ WatchFace({
       views.push({ digits, weekday, aod: isAod });
     }
     dates = LAYOUT.date.digits.map(x => image(x, LAYOUT.date.y, 'digits/date/dash.png', normal));
-    image(LAYOUT.date.dash, LAYOUT.date.y, 'digits/date/slash.png', normal);
+    dateSeparators.push({widget:image(LAYOUT.date.dash, LAYOUT.date.y, 'digits/date/dash.png', normal),layout:LAYOUT.date,aod:false});
     aodDates = LAYOUT.aodDate.digits.map(x => image(x, LAYOUT.aodDate.y, 'digits/aod-date/dash.png', aod));
-    image(LAYOUT.aodDate.dash, LAYOUT.aodDate.y, 'digits/aod-date/slash.png', aod);
+    dateSeparators.push({widget:image(LAYOUT.aodDate.dash, LAYOUT.aodDate.y, 'digits/aod-date/dash.png', aod),layout:LAYOUT.aodDate,aod:true});
     period = image(LAYOUT.period.x, LAYOUT.period.y, 'period/--.png', normal);
     batteryBar = image(LAYOUT.battery.x, LAYOUT.battery.y, 'battery/0.png', normal);
     rings = ['steps','calories','active'].map(kind => image(LAYOUT.rings.x, LAYOUT.rings.y, `ring/${kind}/0.png`, normal));
@@ -157,7 +171,7 @@ WatchFace({
       second_array: fontArray('seconds'), second_space: 0, second_zero: 1, second_follow: 0,
       second_align: hmUI.align.LEFT, show_level: normal });
     hmUI.createWidget(hmUI.widget.IMG_STATUS, { ...LAYOUT.alarmStatus, type: hmUI.system_status.CLOCK, src: 'status/alm.png', show_level: normal });
-    // A gray disconnect tile covers the black connected label when disconnected.
+    // An opaque disconnect tile restores the dim idle label when disconnected.
     image(LAYOUT.signalStatus.x, LAYOUT.signalStatus.y, 'status/sig.png', normal);
     hmUI.createWidget(hmUI.widget.IMG_STATUS, { ...LAYOUT.signalStatus, type: hmUI.system_status.DISCONNECT, src: 'status/sig-off.png', show_level: normal });
     hmUI.createWidget(hmUI.widget.IMG_STATUS, { ...LAYOUT.muteStatus, type: hmUI.system_status.DISTURB, src: 'status/mute.png', show_level: normal });
@@ -166,6 +180,6 @@ WatchFace({
   },
   onDestroy() {
     pause(); destroyed = true; time = battery = weather = sleep = undefined; activity = []; rings = []; fields = []; weatherIcon = weatherDegree = undefined;
-    period = batteryBar = undefined; views = []; dates = []; aodDates = []; previous.clear();
+    period = batteryBar = undefined; views = []; dates = []; aodDates = []; dateSeparators = []; previous.clear();
   },
 });

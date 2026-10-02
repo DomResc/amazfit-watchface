@@ -1,11 +1,17 @@
-# Approved circular artwork
+# Approved Deep Ocean artwork
 
-`background-source.svg` retains the approved Sensors-inspired circular layout with dynamic text, battery segments and progress arcs removed. `background-source.png` is its Chromium rasterization. The existing Lucide SVG icons are retained beside the source; activity and weather icon rasters are generation inputs. The background uses the approved Sage LCD palette, shared by the activity progress arcs and the weather, sleep and time panels, with a graphite background behind the activity rings and continuous circular inset edges and an interior radius of 230 pixels.
+`background-source.svg` retains editable black panel separators, activity tracks and static icons. `background-source.png` is generated from the vector artwork, with two-pixel separators in `#465761`. `scripts/render-retro-lcd-vectors.mjs` renders static icons, activity symbols and the weather families directly from SVG using Sharp bundled with Zeus. The checked-in weather mapping preserves the existing condition families for indices 0–28; weather icons use 32×32 boxes, and smaller activity symbols remain centered in their transparent image boxes with increased left spacing in the layout.
 
-`scripts/render-retro-lcd-assets.py` combines these retained inputs with DSEG7 Classic Bold and Space Grotesk Bold. Glyphs preserve their native advance and baseline instead of resizing their axes independently. Runtime coordinates come from `watchface/layout.json`; generated `layout.js` includes glyph advances for centered variable-length weather and sleep fields.
+`scripts/render-retro-lcd-assets.py` combines these inputs with the retained DSEG7 Classic Bold and Space Grotesk Bold fonts. Runtime coordinates come from `watchface/layout.json`; generated `layout.js` includes glyph advances for variable-length weather and sleep fields.
 
-The main time bottom is y=373 and the seconds bottom is y=373. Status caption centers follow the curved cell areas: ALM (171.5,442), SIG (240,442), MUTE (308.5,442). Activity icons are overlaid after the progress arcs and have no captions. The 24-hour mode uses a transparent period asset.
+Normal time and seconds share a bottom at y=345. Alarm and battery icons share center x=64, with the group centered at y=315. Alarm text and battery bar begin at x=87. Color is reserved for rings and icons; text, numerical sprites and the continuous battery fill remain neutral. AOD shares the updated normal time and date geometry, using dim monochrome colors. Date and weather range separators use a dash.
 
-The normal and AOD previews in `docs/previews/` are assembled from production assets. Their example readings are illustrative.
+Normal and AOD previews in `docs/previews/` use illustrative readings assembled from production assets. Simulator demo readings remain isolated from device builds.
 
-The simulator command injects weather 17°C, daily range 12–21°C and alarm 07:00 only into its temporary copy. Device builds retain native sensor and alarm bindings.
+Numerical glyphs and ordinary labels are rasterized at four times the final resolution and downsampled once without changing their native aspect ratio. Static icons are rendered directly into the background rather than extracted from low-resolution crops.
+
+Glyphs are first rendered on an oversized measurement canvas, then fitted with one uniform scale per style. Their relative segment positions and baseline are preserved inside existing sprite boxes, with a one-pixel ink inset. Labels use actual ink bounds; icon SVG viewports include stroke-safe padding before rasterization. Asset tests check the borders of every active font and icon, including static background icons.
+
+The main icon centers remain fixed when their boxes grow to 32×32. Alarm text is 22 pixels high, with a matching 76-pixel continuous battery bar. Generated `DATE_INK_BOUNDS` lets normal and AOD date separators track the visible gap between day and month rather than the advance boxes.
+
+Alarm and battery content now begin at x=87, seven pixels after their icon boxes. The alarm widget y=288 aligns the visible numerical ink with the icon center at y=296.

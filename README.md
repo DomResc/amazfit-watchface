@@ -2,6 +2,16 @@
 
 A small personal repository for developing Amazfit watchfaces. The first device is Amazfit Balance 2 XT.
 
+## Watchfaces
+
+Illustrative normal-mode previews. Essential's installation preview uses substitute font metrics.
+
+| Watchface | Preview | Design |
+| --- | --- | --- |
+| [Essential](src/watchfaces/essential/README.md) | <img src="src/watchfaces/essential/assets/balance-2-xt/icon.png" alt="Essential watchface preview" width="224" /> | Minimal centered digital time and Italian/English date, with a dedicated AOD. |
+| [Matrix](src/watchfaces/matrix/README.md) | <img src="docs/previews/matrix-normal.png" alt="Matrix watchface preview" width="224" /> | Retro dot-matrix typography, activity metrics and a seconds dial, with minimal AOD. |
+| [Retro LCD](src/watchfaces/retro-lcd/README.md) | <img src="docs/previews/retro-lcd-normal.png" alt="Retro LCD Deep Ocean watchface preview" width="224" /> | Deep Ocean OLED theme, digital time, activity rings, weather, sleep, alarm and a continuous battery bar. |
+
 ## Current status
 
 The first watchface, [Essential](src/watchfaces/essential/README.md), is implemented for Balance 2 XT (`deviceSource: 10486017`). The user confirmed local installation and correct watchface/AOD updates for 0.1.0. The watch selection preview was confirmed correct in 0.1.1, and the user accepted the Gadgetbridge preview correction in 0.1.2. Installation is local through Gadgetbridge; tagged builds can be distributed through automatic GitHub Releases.
@@ -12,7 +22,7 @@ The first watchface, [Essential](src/watchfaces/essential/README.md), is impleme
 
 [Matrix](src/watchfaces/matrix/README.md) is the second independent watchface: retro dot-matrix time, activity metrics and a seconds dial with minimal AOD. Build it with `npm run build -- matrix`; the user confirmed a successful trial on Balance 2 XT. Detailed device checks remain pending.
 
-[Retro LCD](src/watchfaces/retro-lcd/README.md) is the third independent watchface, with vintage LCD artwork, activity instruments, alarm time, battery bars and phone/DND statuses. Build with `npm run build -- retro-lcd`; physical validation is pending.
+[Retro LCD](src/watchfaces/retro-lcd/README.md) is the third independent watchface, with the Deep Ocean OLED theme, activity instruments, weather, sleep, alarm time, a continuous battery bar and phone/DND statuses. Build with `npm run build -- retro-lcd`; local device screenshots have been reviewed, while final spacing and alignment checks remain pending.
 
 ## Repository layout
 

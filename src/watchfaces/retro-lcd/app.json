@@ -5,12 +5,12 @@
     "appName": "Retro LCD",
     "appType": "watchface",
     "version": {
-      "code": 7,
-      "name": "0.1.6"
+      "code": 12,
+      "name": "0.1.11"
     },
     "icon": "icon.png",
     "vender": "Domenico Rescigno",
-    "description": "Vintage LCD time, activity instruments, alarm and minimal AOD."
+    "description": "Deep Ocean OLED digital time, activity instruments, alarm and minimal AOD."
   },
   "permissions": [],
   "runtime": {
