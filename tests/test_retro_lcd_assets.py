@@ -65,6 +65,16 @@ class RetroAssetTests(unittest.TestCase):
         self.assertLess(abs(49 / 60 - 21 / 26), 0.02)
         self.assertEqual(319 + 26, 285 + 60)
 
+    def test_secondary_field_sizes_and_icon_alignment(self):
+        layout = json.loads((ASSETS.parents[1] / 'watchface/layout.json').read_text())
+        self.assertEqual(png(ASSETS / 'digits/alarm/8.png')[:2], (21, 26))
+        self.assertEqual(png(ASSETS / 'digits/alarm/8.png')[1], png(ASSETS / 'digits/seconds/8.png')[1])
+        self.assertEqual(png(ASSETS / 'digits/sleep/8.png')[1], png(ASSETS / 'digits/temperature/8.png')[1])
+        self.assertEqual(layout['alarm']['w'], 4 * 21 + 5)
+        self.assertEqual(layout['alarm']['h'], 26)
+        artwork = (ASSETS.parents[1] / 'background-source.svg').read_text()
+        self.assertIn(f'x="{layout["weather"]["x"]}" y="183"', artwork)
+
     def test_continuous_battery_fill_and_neutral_digits(self):
         fills = []
         for level in range(11):

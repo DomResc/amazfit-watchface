@@ -5,8 +5,8 @@
     "appName": "Retro LCD",
     "appType": "watchface",
     "version": {
-      "code": 12,
-      "name": "0.1.11"
+      "code": 13,
+      "name": "0.1.12"
     },
     "icon": "icon.png",
     "vender": "Domenico Rescigno",

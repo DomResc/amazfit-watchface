@@ -38,9 +38,9 @@ export const LAYOUT = {
   },
   "alarm": {
     "x": 87,
-    "y": 288,
-    "w": 76,
-    "h": 22
+    "y": 284,
+    "w": 89,
+    "h": 26
   },
   "battery": {
     "x": 87,
@@ -80,10 +80,10 @@ export const LAYOUT = {
     ]
   },
   "weather": {
-    "x": 263,
+    "x": 272,
     "y": 75,
     "temperature": {
-      "center": 330,
+      "center": 339,
       "y": 70,
       "style": "temperature",
       "length": 3
@@ -97,7 +97,7 @@ export const LAYOUT = {
   },
   "sleep": {
     "center": 383,
-    "y": 181,
+    "y": 180,
     "style": "sleep",
     "length": 5
   },
@@ -171,23 +171,23 @@ export const GLYPH_WIDTHS = {
     "slash": 18
   },
   "alarm": {
-    "0": 18,
-    "1": 18,
-    "2": 18,
-    "3": 18,
-    "4": 18,
-    "5": 18,
-    "6": 18,
-    "7": 18,
-    "8": 18,
-    "9": 18,
-    "dash": 18,
-    "colon": 4,
-    "dot": 5,
-    "degree": 18,
-    "C": 18,
-    "blank": 4,
-    "slash": 14
+    "0": 21,
+    "1": 21,
+    "2": 21,
+    "3": 21,
+    "4": 21,
+    "5": 21,
+    "6": 21,
+    "7": 21,
+    "8": 21,
+    "9": 21,
+    "dash": 21,
+    "colon": 5,
+    "dot": 6,
+    "degree": 21,
+    "C": 21,
+    "blank": 5,
+    "slash": 17
   },
   "seconds": {
     "0": 21,
@@ -285,23 +285,23 @@ export const GLYPH_WIDTHS = {
     "slash": 13
   },
   "sleep": {
-    "0": 29,
-    "1": 29,
-    "2": 29,
-    "3": 29,
-    "4": 29,
-    "5": 29,
-    "6": 29,
-    "7": 29,
-    "8": 29,
-    "9": 29,
-    "dash": 29,
-    "colon": 7,
+    "0": 31,
+    "1": 31,
+    "2": 31,
+    "3": 31,
+    "4": 31,
+    "5": 31,
+    "6": 31,
+    "7": 31,
+    "8": 31,
+    "9": 31,
+    "dash": 31,
+    "colon": 8,
     "dot": 7,
-    "degree": 29,
-    "C": 29,
-    "blank": 7,
-    "slash": 23
+    "degree": 31,
+    "C": 31,
+    "blank": 8,
+    "slash": 25
   }
 };
 /** @type {Record<string, {left:number,right:number}>} */

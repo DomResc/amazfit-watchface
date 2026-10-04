@@ -1,5 +1,7 @@
-Retro LCD 0.1.11 — Alarm and battery spacing
+Retro LCD 0.1.12 — Consistent secondary typography
 
-Adds space between alarm/battery icons and the right-side content, keeping alarm text and the battery bar aligned. Centers the visible alarm digits vertically against the icon. Other widget geometry and Deep Ocean colors are preserved.
+Aligns weather and sleep icons on the same vertical axis. Increases alarm glyphs to 26 pixels, matching seconds, and sleep glyphs to 38 pixels, matching temperature. Keeps visible alarm digits centered against their icon and preserves the main time and date hierarchy.
 
-Open the ZIP matching your deviceSource with Gadgetbridge. Final spacing and alarm alignment require a new physical-device check.
+AOD retains the same time, weekday and date geometry as normal mode, with dim monochrome assets.
+
+Open the ZIP matching your deviceSource with Gadgetbridge. Local tests, asset checks and builds do not establish physical-device behavior.

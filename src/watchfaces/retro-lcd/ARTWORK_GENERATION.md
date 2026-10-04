@@ -12,6 +12,6 @@ Numerical glyphs and ordinary labels are rasterized at four times the final reso
 
 Glyphs are first rendered on an oversized measurement canvas, then fitted with one uniform scale per style. Their relative segment positions and baseline are preserved inside existing sprite boxes, with a one-pixel ink inset. Labels use actual ink bounds; icon SVG viewports include stroke-safe padding before rasterization. Asset tests check the borders of every active font and icon, including static background icons.
 
-The main icon centers remain fixed when their boxes grow to 32×32. Alarm text is 22 pixels high, with a matching 76-pixel continuous battery bar. Generated `DATE_INK_BOUNDS` lets normal and AOD date separators track the visible gap between day and month rather than the advance boxes.
+The main icon centers remain fixed when their boxes grow to 32×32. Alarm text and seconds share a 26-pixel sprite height. Temperature and sleep share a 38-pixel sprite height. Weather and sleep icons share center x=288 in 32-pixel boxes. The alarm field is 89 pixels wide; the continuous battery bar remains 76 pixels wide. Generated `DATE_INK_BOUNDS` lets normal and AOD date separators track the visible gap between day and month rather than the advance boxes.
 
-Alarm and battery content now begin at x=87, seven pixels after their icon boxes. The alarm widget y=288 aligns the visible numerical ink with the icon center at y=296.
+Alarm and battery content now begin at x=87, seven pixels after their icon boxes. The alarm widget y=284 aligns the visible numerical ink with the icon center at y=296.

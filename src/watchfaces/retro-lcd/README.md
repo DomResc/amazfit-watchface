@@ -1,6 +1,6 @@
 # Retro LCD
 
-Independent 480 × 480 circular OLED watchface for the full round 480 × 480 Amazfit catalog. Application ID `1092704`, version `0.1.11`.
+Independent 480 × 480 circular OLED watchface for the full round 480 × 480 Amazfit catalog. Application ID `1092704`, version `0.1.12`.
 
 The approved Deep Ocean theme uses a true black background, neutral text and continuous activity rings in `#62c7d4`, `#3598aa` and `#216374`. Weather, sleep, alarm and battery icons use the matching turquoise accent. The digital typography and sensor bindings are preserved.
 
@@ -51,3 +51,5 @@ Version 0.1.9 measures actual glyph ink before rendering and reserves a safe ins
 Version 0.1.10 increases the main icons to 32×32, the native alarm font to 22 pixels, and the battery bar to 76×24. Alarm/battery centers and content alignment are preserved. The normal/AOD date dash is centered between visible adjacent glyph edges, including narrow month digits.
 
 Version 0.1.11 adds a seven-pixel gap between the main alarm/battery icon boxes and the right-side content, and centers visible alarm digits against the icon rather than the font box.
+
+Version 0.1.12 aligns weather and sleep icons on one vertical axis. Alarm and seconds share 26-pixel glyph heights; sleep and temperature share 38-pixel glyph heights. AOD retains matching normal time, weekday and date geometry.

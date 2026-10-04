@@ -37,9 +37,9 @@
   },
   "alarm": {
     "x": 87,
-    "y": 288,
-    "w": 76,
-    "h": 22
+    "y": 284,
+    "w": 89,
+    "h": 26
   },
   "battery": {
     "x": 87,
@@ -79,10 +79,10 @@
     ]
   },
   "weather": {
-    "x": 263,
+    "x": 272,
     "y": 75,
     "temperature": {
-      "center": 330,
+      "center": 339,
       "y": 70,
       "style": "temperature",
       "length": 3
@@ -96,7 +96,7 @@
   },
   "sleep": {
     "center": 383,
-    "y": 181,
+    "y": 180,
     "style": "sleep",
     "length": 5
   },

@@ -17,7 +17,7 @@ INK = '#e8edf0'
 GRAY = '#66747e'
 DSEG = PROJECT / 'fonts/DSEG7Classic-Bold.ttf'
 LABEL = PROJECT / 'fonts/SpaceGrotesk-Bold.ttf'
-STYLES = {'time':60,'date':28,'alarm':22,'seconds':26,'aod':60,'aod-date':28,'temperature':38,'range':20,'sleep':36}
+STYLES = {'time':60,'date':28,'alarm':26,'seconds':26,'aod':60,'aod-date':28,'temperature':38,'range':20,'sleep':38}
 def canvas(w,h): return Image.new('RGBA',(w*S,h*S))
 def downsample(im, size):
     if 'ink' in im.info:
@@ -142,9 +142,9 @@ def date_text(im,value,aod):
 normal=background.copy()
 for kind,level in [('steps',82),('calories',81),('active',75)]:paste(normal,f'ring/{kind}/{level}.png',61,57)
 for icon in LAYOUT['rings']['icons']:paste(normal,f"icons/{icon['name']}.png",icon['x'],icon['y'])
-text(normal,'18:19',284,285,'time');date_text(normal,'0110',False);text(normal,'23',409,319,'seconds');text(normal,'07:00',125,288,'alarm')
-text(normal,'17',330,70,'temperature');text(normal,'°',365,66,'range');text(normal,'12° - 21°C',343,120,'range');text(normal,'7:24',383,181,'sleep')
-paste(normal,'weather/0.png',263,75);battery_preview=Image.open(ASSETS/'battery/6.png').convert('RGBA').resize((76,24),Image.Resampling.LANCZOS);normal.paste(battery_preview,(87,322),battery_preview);paste(normal,'status/sec.png',392,296);paste(normal,'week/it/4.png',129,380)
+text(normal,'18:19',284,285,'time');date_text(normal,'0110',False);text(normal,'23',409,319,'seconds');text(normal,'07:00',131.5,284,'alarm')
+text(normal,'17',339,70,'temperature');text(normal,'°',374,66,'range');text(normal,'12° - 21°C',343,120,'range');text(normal,'7:24',383,180,'sleep')
+paste(normal,'weather/0.png',272,75);battery_preview=Image.open(ASSETS/'battery/6.png').convert('RGBA').resize((76,24),Image.Resampling.LANCZOS);normal.paste(battery_preview,(87,322),battery_preview);paste(normal,'status/sec.png',392,296);paste(normal,'week/it/4.png',129,380)
 for key,value in [('alarmStatus','alm'),('signalStatus','sig')]:l=LAYOUT[key];paste(normal,f'status/{value}.png',l['x'],l['y'])
 preview=ROOT/'docs/previews';preview.mkdir(parents=True,exist_ok=True);normal.save(preview/'retro-lcd-normal.png');normal.resize((324,324),Image.Resampling.LANCZOS).save(ASSETS/'icon.png')
 aod=Image.new('RGB',(480,480),'black');text(aod,'18:19',284,285,'aod');date_text(aod,'0110',True);paste(aod,'week/aod-it/4.png',129,380);aod.save(preview/'retro-lcd-aod.png')

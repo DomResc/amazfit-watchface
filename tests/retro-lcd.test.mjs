@@ -88,10 +88,10 @@ test('approved geometry aligns second bottoms and contains only icon activity ri
   assert.equal(alarm.padding,true);
   const battery = h.widgets.find(w=>w.options.src?.startsWith('battery/')).options;
   assert.equal(alarm.x, battery.x);
-  assert.equal(alarm.w, 76);
-  assert.equal(alarm.y, 288);
+  assert.equal(alarm.w, 89);
+  assert.equal(alarm.y, 284);
   assert.equal(battery.y, 322);
-  assert.ok(alarm.w >= 4 * 16 + 4);
+  assert.ok(alarm.w >= 4 * 21 + 5);
   const seconds=h.widgets.find(w=>w.id===h.kinds.IMG_TIME).options;
   assert.equal(seconds.second_startY+26,285+60);
   assert.equal(h.widgets.filter(w=>w.options.src?.startsWith('icons/')).length,3);
@@ -108,12 +108,12 @@ test('weather and sleep refresh on resume, invalid data uses placeholders',async
   h.delegate.resume_call();
   assert.equal(h.widgets.find(w=>w.options.src?.startsWith('weather/')).options.src,'weather/28.png');
   assert.equal(h.widgets.filter(w=>w.options.y===70).map(w=>w.options.src).join(','),'digits/temperature/dash.png,digits/temperature/1.png,digits/temperature/2.png');
-  assert.equal(h.widgets.filter(w=>w.options.y===181).map(w=>w.options.src).join(','),'digits/sleep/1.png,digits/sleep/2.png,digits/sleep/colon.png,digits/sleep/3.png,digits/sleep/4.png');
+  assert.equal(h.widgets.filter(w=>w.options.y===180).map(w=>w.options.src).join(','),'digits/sleep/1.png,digits/sleep/2.png,digits/sleep/colon.png,digits/sleep/3.png,digits/sleep/4.png');
   h.sensors[5].current=Infinity;h.sensors[5].curAirIconIndex=999;
   h.sensors[5].getForecastWeather=()=>({forecastData:{count:0,data:[]}});
   h.sensors[6].getTotalTime=()=>NaN;h.tick();
   assert.equal(h.widgets.find(w=>w.options.src?.startsWith('weather/')).options.src,'weather/25.png');
-  assert.equal(h.widgets.filter(w=>w.options.y===181).map(w=>w.options.src).join(','),'digits/sleep/dash.png,digits/sleep/dash.png,digits/sleep/colon.png,digits/sleep/dash.png,digits/sleep/dash.png');
+  assert.equal(h.widgets.filter(w=>w.options.y===180).map(w=>w.options.src).join(','),'digits/sleep/dash.png,digits/sleep/dash.png,digits/sleep/colon.png,digits/sleep/dash.png,digits/sleep/dash.png');
 });
 
 test('normal date uses day/month and status captions share one baseline',async()=>{
