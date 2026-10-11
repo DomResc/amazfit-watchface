@@ -27,5 +27,7 @@ export function formatDisplay(time, language) {
   return {
     time: hasTime ? `${pad(/** @type {number} */ (hour))}:${pad(/** @type {number} */ (minute))}` : '--:--',
     date: `${weekday}  ${date}`,
+    weekdayDay: `${weekday}  ${date.slice(0, 2)}`,
+    month: date.slice(3),
   };
 }

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFile, access } from 'node:fs/promises';
 import { formatDisplay } from '../src/watchfaces/matrix/watchface/format.js';
-import { NORMAL } from '../src/watchfaces/matrix/watchface/layout.js';
+import { NORMAL, AOD } from '../src/watchfaces/matrix/watchface/layout.js';
 
 const sample = {hour:14, minute:28, day:1, month:10, week:4};
 test('Matrix always uses 24-hour time with localized date and safe placeholders', () => {
@@ -12,11 +12,15 @@ test('Matrix always uses 24-hour time with localized date and safe placeholders'
   assert.equal(formatDisplay(sample,10).date,'GIO  01 OTT');
   assert.equal(formatDisplay({...sample,day:2,week:5},99).date,'FRI  02 OCT');
   assert.equal(formatDisplay({},2).time,'--:--');
+  assert.equal(formatDisplay({},2).weekdayDay,'---  --');
+  assert.equal(formatDisplay({},2).month,'---');
+  assert.equal(formatDisplay(sample,10).weekdayDay,'GIO  01');
+  assert.equal(formatDisplay(sample,10).month,'OTT');
   assert.equal(formatDisplay({...sample,hour:24},2).time,'--:--');
 });
 test('dial edges align with the hour and minute outer edges', () => {
   assert.ok(Math.abs(NORMAL.battery.x - NORMAL.digits[0]) <= 1);
-  assert.ok(Math.abs(NORMAL.seconds.x + 54 - (NORMAL.digits[3] + 60)) <= 1);
+  assert.ok(Math.abs(NORMAL.seconds.x + 58 - (NORMAL.digits[3] + 75)) <= 1);
   assert.equal(NORMAL.battery.cy,NORMAL.seconds.cy);
 });
 async function harness(deviceSource=10486017) {
@@ -41,14 +45,14 @@ test('native seconds and activity widgets are normal-only and every bitmap exist
   const h=await harness();
   assert.equal(h.counts().creates,1); // No continuous heart measurement is started.
   const seconds=h.widgets.find(w=>w.id===h.kinds.IMG_TIME).options;
-  assert.equal(seconds.second_zero,1);assert.equal(seconds.second_startX,289);
+  assert.equal(seconds.second_zero,1);assert.equal(seconds.second_startX,288);
   const pointer=h.widgets.find(w=>w.id===h.kinds.TIME_POINTER).options;
-  assert.equal(pointer.second_centerX,366);assert.equal(pointer.second_centerY,358);
+  assert.equal(pointer.second_centerX,395);assert.equal(pointer.second_centerY,337);
   assert.equal(h.widgets.filter(w=>w.id===h.kinds.TEXT_IMG).length,5);
   const arcs=h.widgets.filter(w=>w.id===h.kinds.ARC_PROGRESS);
   assert.equal(arcs.length,3);
   assert.deepEqual(arcs.map(w=>[w.options.start_angle,w.options.end_angle]),[[0,360],[0,360],[0,360]]);
-  assert.ok(h.widgets.some(w=>w.id===h.kinds.FILL_RECT&&w.options.x===208&&w.options.y===76&&w.options.w===64&&w.options.h===33));
+  assert.ok(h.widgets.some(w=>w.id===h.kinds.FILL_RECT&&w.options.x===205&&w.options.y===75&&w.options.w===70&&w.options.h===35));
   for(const w of h.widgets.filter(w=>w.id===h.kinds.TEXT))assert.equal(w.options.font,'fonts/Orbitron-Medium.ttf');
   for(const w of h.widgets){
     if([h.kinds.TEXT_IMG,h.kinds.IMG_POINTER,h.kinds.IMG_TIME,h.kinds.TIME_POINTER,h.kinds.ARC_PROGRESS,h.kinds.CIRCLE].includes(w.id))assert.equal(w.options.show_level,1);
@@ -57,7 +61,7 @@ test('native seconds and activity widgets are normal-only and every bitmap exist
       for(const path of paths)await access(new URL(`../src/watchfaces/matrix/assets/balance-2-xt/${path}`,import.meta.url));
     }
   }
-  assert.equal(h.widgets.filter(w=>w.options.show_level===2).length,6);
+  assert.equal(h.widgets.filter(w=>w.options.show_level===2).length,7);
 });
 test('minute refresh handles rollover, resume, language and units without duplicate listeners',async()=>{
   const h=await harness();const before=h.counts().writes;h.tick();assert.equal(h.counts().writes,before);
@@ -65,7 +69,8 @@ test('minute refresh handles rollover, resume, language and units without duplic
   h.delegate.pause_call();h.delegate.pause_call();assert.equal(h.listeners.size,0);
   Object.assign(h.sensor,{hour:0,minute:0,day:2,week:5});h.settings.language=10;h.settings.mileage=1;
   h.delegate.resume_call();assert.equal(h.listeners.size,1);
-  assert.equal(h.widgets.find(w=>w.id===h.kinds.TEXT && w.options.y===177).options.text,'VEN  02 OTT');
+  assert.equal(h.widgets.find(w=>w.id===h.kinds.TEXT && w.options.x===54 && w.options.y===172).options.text,'VEN  02');
+  assert.equal(h.widgets.find(w=>w.id===h.kinds.TEXT && w.options.x===280 && w.options.y===172).options.text,'OTT');
   assert.equal(h.widgets.find(w=>w.options.x===334 && w.id===h.kinds.TEXT).options.text,'MI');
   const normal=h.widgets.filter(w=>w.id===h.kinds.IMG && w.options.show_level===1 && w.options.src.startsWith('digits/time/') && !w.options.src.endsWith('colon.png'));
   assert.deepEqual(normal.map(w=>w.options.src),Array(4).fill('digits/time/0.png'));
@@ -79,7 +84,7 @@ test('legacy GTR 3 Pro variants use the system font while retaining bitmap time 
     const h=await harness(source);
     for(const w of h.widgets.filter(w=>w.id===h.kinds.TEXT))assert.ok(!('font' in w.options));
     assert.equal(h.widgets.filter(w=>w.id===h.kinds.TEXT_IMG).length,5);
-    assert.equal(h.widgets.find(w=>w.id===h.kinds.TEXT&&w.options.y===177).options.text,'THU  01 OCT');
+    assert.equal(h.widgets.find(w=>w.id===h.kinds.TEXT&&w.options.x===54 && w.options.y===172).options.text,'THU  01');
     h.definition.onDestroy();assert.equal(h.listeners.size,0);
   }
 });
@@ -90,4 +95,23 @@ test('Matrix includes the complete round 480 by 480 catalog',async()=>{
   const manifest=JSON.parse(await readFile(new URL('matrix/app.json',base),'utf8'));
   assert.deepEqual(actual,expected);
   assert.deepEqual(manifest.targets['balance-2-xt'].platforms,expected.devices);
+});
+
+test('normal and AOD retain identical time and split-date positions', () => {
+  assert.deepEqual(AOD.digits, NORMAL.digits);
+  assert.equal(AOD.y, NORMAL.y);
+  assert.deepEqual(AOD.colon, NORMAL.colon);
+  assert.deepEqual(AOD.month, NORMAL.month);
+  for (const key of ['x', 'y', 'w', 'h', 'text_size']) assert.equal(AOD.date[key], NORMAL.date[key]);
+});
+test('split date rolls over to the next month in normal and AOD', async () => {
+  const h = await harness();
+  Object.assign(h.sensor, {hour:0, minute:0, day:1, month:11, week:7});
+  h.settings.language = 10;
+  h.tick();
+  for (const level of [1, 2]) {
+    assert.equal(h.widgets.find(w => w.id === h.kinds.TEXT && w.options.x === 54 && w.options.show_level === level).options.text, 'DOM  01');
+    assert.equal(h.widgets.find(w => w.id === h.kinds.TEXT && w.options.x === 280 && w.options.y === 172 && w.options.show_level === level).options.text, 'NOV');
+  }
+  h.definition.onDestroy();
 });

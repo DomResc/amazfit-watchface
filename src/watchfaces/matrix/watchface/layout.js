@@ -1,13 +1,15 @@
-// Coordinates preserve the approved preview, including the seconds dial's right edge.
+// Normal and AOD share the approved square-dot time and split-date geometry.
 export const NORMAL = {
-  digits: [74, 152, 256, 334], y: 211, colon: { x: 230, y: 211 },
-  date: { x: 70, y: 177, w: 340, h: 24, text_size: 16, color: 0xe0e3e7 },
-  battery: { x: 73, y: 331, cx: 100, cy: 358 },
-  seconds: { x: 339, y: 331, cx: 366, cy: 358, textX: 289, textY: 349 },
+  digits: [54, 141, 263, 350], y: 207, colon: { x: 235, y: 207 },
+  date: { x: 54, y: 172, w: 142, h: 24, text_size: 18, color: 0xeeeeee },
+  month: { x: 280, y: 172, w: 124, h: 24 },
+  battery: { x: 55, y: 308, cx: 84, cy: 337 },
+  seconds: { x: 366, y: 308, cx: 395, cy: 337, textX: 288, textY: 322 },
 };
 export const AOD = {
-  digits: [74, 152, 256, 334], y: 206, colon: { x: 230, y: 206 },
-  date: { x: 70, y: 161, w: 340, h: 24, text_size: 15, color: 0x888d95 },
+  digits: [...NORMAL.digits], y: NORMAL.y, colon: { ...NORMAL.colon },
+  date: { ...NORMAL.date, color: 0x999999 },
+  month: { ...NORMAL.month },
 };
 /** @param {string} style */
 export function fontArray(style) {

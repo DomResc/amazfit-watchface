@@ -4,12 +4,12 @@ Independent retro dot-matrix watchface for round 480 × 480 Amazfit devices, des
 
 ## Display
 
-- Fixed 24-hour time with 15 × 21 dot-matrix digits using the same 2 × 2 pixel LEDs as small values, with Italian or English weekday and date labels.
+- Fixed 24-hour time with 15 × 15 square-grid digits using round 3-pixel dots. Small values use a thinner 5 × 7 grid. Italian or English weekday/day and month labels sit above the hour and minute groups.
 - Calories, last heart rate measurement, distance, battery and steps use native Zepp data widgets. Numeric field padding follows the native widgets rather than the reference image's decorative leading zeros.
 - Distance uses the device's metric/imperial preference with a matching KM/MI heading.
 - Battery and heart rate use native data-bound pointers. The heart scale follows Zepp's native HEART data range; it is a visual indicator rather than a clinical scale.
 - Seconds replace the goal indicator: a two-digit counter and a native seconds hand completing a revolution each minute. The dial's right edge aligns with the minute digits.
-- AOD shows only time and date, using dimmer digits without inactive dots. Seconds and activity widgets are normal-only.
+- AOD shows only time and the split date at the same coordinates as the normal display, using dimmer digits without inactive dots. Seconds and activity widgets are normal-only.
 
 Time/date refresh on the minute event and on resume. Subscription cleanup follows Essential's lifecycle pattern. Native Zepp widgets own activity and seconds updates; no JavaScript second timer or continuous heart measurement is started.
 
@@ -32,12 +32,14 @@ The build validates and writes installation ZIPs into `dist/install/` for the co
 python3 scripts/render-matrix-assets.py
 ```
 
-Pillow is an optional generation input. The generator uses the bundled Orbitron Medium font by default and generates original LED/hand assets and previews. Labels and dates render directly through Zepp's native text widgets with an explicit Orbitron TTF on supported devices. GTR 3 Pro variants use the system font because they lack custom TTF support. Dial outlines render through native arcs; host-side previews approximate native rasterization.
+Pillow is an optional generation input. The generator uses the bundled Orbitron Medium font by default and generates original round-dot/hand assets and previews. Labels and dates render directly through Zepp's native text widgets with an explicit Orbitron TTF on supported devices. GTR 3 Pro variants use the system font because they lack custom TTF support. Dial outlines render through native arcs; host-side previews approximate native rasterization.
 
 See [third-party notices](THIRD_PARTY_NOTICES.md) and [the font license](Orbitron-OFL.txt). The complete font license is included in installation ZIPs.
 
 
 ## Device validation
+
+The current square-dot redesign has aligned normal/AOD geometry and regression coverage for split-date rollover and bitmap registration. Physical validation of this redesign is pending.
 
 The 0.1.1 Orbitron/native-arc variant has been compiled and loaded in the Balance 2 simulator; physical validation of 0.1.1 is pending. The user confirmed a successful physical-device trial of 0.1.0 on Balance 2 XT with the `10486017` build on 2026-10-01. Detailed checks remain pending: verify installation and selection preview, midnight/date rollover, minute updates, seconds `59 → 00`, hand direction, heart/battery pointer updates, distance units, long activity values, sleep/resume and AOD transitions on Balance 2 XT. Check that native seconds widgets stop updating while AOD is active.
 

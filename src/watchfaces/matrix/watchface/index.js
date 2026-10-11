@@ -5,7 +5,7 @@ import { NORMAL, AOD, fontArray } from './layout';
 let sensor;
 let listening = false;
 let destroyed = false;
-/** @type {{digits: MatrixWidget[], date: MatrixWidget, aod: boolean}[]} */
+/** @type {{digits: MatrixWidget[], date: MatrixWidget, month: MatrixWidget, aod: boolean}[]} */
 let views = [];
 /** @type {MatrixWidget | undefined} */
 let distanceLabel;
@@ -23,7 +23,8 @@ function update() {
   const digits = display.time.replace(':', '');
   for (const view of views) {
     view.digits.forEach((widget, i) => write(widget, `digits/${view.aod ? 'aod' : 'time'}/${digits[i] === '-' ? 'dash' : digits[i]}.png`, true));
-    write(view.date, display.date, false);
+    write(view.date, display.weekdayDay, false);
+    write(view.month, display.month, false);
   }
   if (distanceLabel) write(distanceLabel, hmSetting.getMileageUnit() === 1 ? 'MI' : 'KM', false);
 }
@@ -59,7 +60,7 @@ WatchFace({
     const aod = hmUI.show_level.ONAL_AOD;
     hmUI.createWidget(hmUI.widget.FILL_RECT, { x: 0, y: 0, w: 480, h: 480, color: 0, show_level: normal | aod });
     /** @type {(x: number, y: number, w: number, h: number, size: number, value: string, level: number, color?: number) => MatrixWidget} */
-    const text = (x, y, w, h, size, value, level, color = 0xffffff) => hmUI.createWidget(hmUI.widget.TEXT, {
+    const text = (x, y, w, h, size, value, level, color = 0xeeeeee) => hmUI.createWidget(hmUI.widget.TEXT, {
       x, y, w, h, text_size: size, text: value, color,
       ...(systemFont ? {} : { font: 'fonts/Orbitron-Medium.ttf' }),
       align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V,
@@ -68,47 +69,47 @@ WatchFace({
     /** @type {(cx: number, cy: number, radius: number, start: number, end: number) => MatrixWidget} */
     const arc = (cx, cy, radius, start, end) => hmUI.createWidget(hmUI.widget.ARC_PROGRESS, {
       center_x: cx, center_y: cy, radius, start_angle: start, end_angle: end,
-      line_width: 2, level: 100, color: 0xffffff, show_level: normal,
+      line_width: 2, level: 100, color: 0xeeeeee, show_level: normal,
     });
     // Mask the lower half of a full native ring; partial-arc orientation differs in this simulator.
-    arc(240, 76, 30, 0, 360);
-    hmUI.createWidget(hmUI.widget.FILL_RECT, { x: 208, y: 76, w: 64, h: 33, color: 0, show_level: normal });
+    arc(240, 75, 33, 0, 360);
+    hmUI.createWidget(hmUI.widget.FILL_RECT, { x: 205, y: 75, w: 70, h: 35, color: 0, show_level: normal });
     for (const cx of [NORMAL.battery.cx, NORMAL.seconds.cx]) {
-      arc(cx, 358, 26, 0, 360);
-      hmUI.createWidget(hmUI.widget.CIRCLE, { center_x: cx, center_y: 358, radius: 2, color: 0xffffff, show_level: normal });
-      hmUI.createWidget(hmUI.widget.FILL_RECT, { x: cx, y: 380, w: 1, h: 4, color: 0xaaaaaa, show_level: normal });
+      arc(cx, 337, 29, 0, 360);
+      hmUI.createWidget(hmUI.widget.FILL_RECT, { x: cx, y: 361, w: 1, h: 5, color: 0xaaaaaa, show_level: normal });
     }
-    text(76, 104, 70, 20, 13, 'KCAL', normal);
-    text(210, 119, 60, 18, 12, 'BPM', normal);
-    text(190, 64, 20, 15, 10, 'L', normal);
-    text(270, 64, 20, 15, 10, 'H', normal);
-    text(140, 325, 60, 23, 13, 'BAT', normal);
-    text(280, 325, 60, 23, 13, 'SEC', normal);
-    text(200, 359, 24, 21, 16, '%', normal);
-    text(190, 403, 100, 22, 13, 'STEPS', normal);
+    text(75, 106, 70, 20, 12, 'KCAL', normal);
+    text(210, 122, 60, 18, 12, 'BPM', normal);
+    text(186, 67, 20, 15, 9, 'L', normal);
+    text(274, 67, 20, 15, 9, 'H', normal);
+    text(133, 295, 60, 23, 12, 'BAT', normal);
+    text(280, 295, 60, 23, 12, 'SEC', normal);
+    text(212, 341, 24, 21, 16, '%', normal);
+    text(190, 377, 100, 22, 12, 'STEPS', normal);
     for (const [layout, level, isAod] of /** @type {[typeof NORMAL | typeof AOD, number, boolean][]} */ ([[NORMAL, normal, false], [AOD, aod, true]])) {
       const digits = layout.digits.map(x => image(x, layout.y, `digits/${isAod ? 'aod' : 'time'}/dash.png`, level));
       image(layout.colon.x, layout.colon.y, `digits/${isAod ? 'aod' : 'time'}/colon.png`, level);
-      const date = text(70, layout.date.y, 340, 24, isAod ? 15 : 16, '', level, isAod ? 0x888d95 : 0xe0e3e7);
-      views.push({ digits, date, aod: isAod });
+      const date = text(layout.date.x, layout.date.y, layout.date.w, layout.date.h, layout.date.text_size, '', level, layout.date.color);
+      const month = text(layout.month.x, layout.month.y, layout.month.w, layout.month.h, layout.date.text_size, '', level, layout.date.color);
+      views.push({ digits, date, month, aod: isAod });
     }
-    distanceLabel = text(334, 104, 70, 20, 13, 'KM', normal);
-    metric(65, 129, 93, 27, hmUI.data_type.CAL, 'small');
-    metric(322, 129, 94, 27, hmUI.data_type.DISTANCE, 'small');
-    metric(205, 87, 70, 29, hmUI.data_type.HEART, 'heart');
-    metric(141, 349, 62, 26, hmUI.data_type.BATTERY, 'small');
-    metric(171, 431, 138, 27, hmUI.data_type.STEP, 'small');
-    hmUI.createWidget(hmUI.widget.IMG_POINTER, { src: 'battery-hand.png', x: 2, y: 23,
+    distanceLabel = text(334, 106, 70, 20, 12, 'KM', normal);
+    metric(50, 131, 120, 28, hmUI.data_type.CAL, 'small');
+    metric(312, 131, 114, 28, hmUI.data_type.DISTANCE, 'small');
+    metric(205, 85, 70, 28, hmUI.data_type.HEART, 'heart');
+    metric(130, 322, 66, 28, hmUI.data_type.BATTERY, 'small');
+    metric(171, 407, 138, 28, hmUI.data_type.STEP, 'small');
+    hmUI.createWidget(hmUI.widget.IMG_POINTER, { src: 'battery-hand.png', x: 2, y: 26,
       center_x: NORMAL.battery.cx, center_y: NORMAL.battery.cy, start_angle: 225, end_angle: 495,
       type: hmUI.data_type.BATTERY, invalid_visible: false, show_level: normal });
-    hmUI.createWidget(hmUI.widget.IMG_POINTER, { src: 'heart-hand.png', x: 2, y: 25,
-      center_x: 240, center_y: 76, start_angle: 270, end_angle: 450,
+    hmUI.createWidget(hmUI.widget.IMG_POINTER, { src: 'heart-hand.png', x: 2, y: 30,
+      center_x: 240, center_y: 75, start_angle: 270, end_angle: 450,
       type: hmUI.data_type.HEART, invalid_visible: false, show_level: normal });
     hmUI.createWidget(hmUI.widget.IMG_TIME, { second_startX: NORMAL.seconds.textX, second_startY: NORMAL.seconds.textY,
       second_array: fontArray('small'), second_space: 3, second_zero: 1, second_follow: 0,
       second_align: hmUI.align.LEFT, show_level: normal });
     hmUI.createWidget(hmUI.widget.TIME_POINTER, { second_centerX: NORMAL.seconds.cx, second_centerY: NORMAL.seconds.cy,
-      second_posX: 2, second_posY: 23, second_path: 'battery-hand.png', show_level: normal });
+      second_posX: 2, second_posY: 26, second_path: 'battery-hand.png', show_level: normal });
     hmUI.createWidget(hmUI.widget.WIDGET_DELEGATE, { resume_call: resume, pause_call: pause });
     resume();
   },
